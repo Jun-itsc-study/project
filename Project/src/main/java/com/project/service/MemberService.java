@@ -24,14 +24,16 @@ public class MemberService {
 		return mapper.login(map);
 	}
 
-	public int register(String id, String pwd, String name, Date birth, String tel, String address) {
+	public int register(String id, String pwd, String name, Date birth, String tel, String postno, String address1, String address2) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("pwd", pwd);
 		map.put("name", name);
 		map.put("birth", birth);
 		map.put("tel", tel);
-		map.put("address", address);
+		map.put("postno", postno);
+		map.put("address1", address1);
+		map.put("address2", address2);
 		
 		return mapper.register(map);
 	}
@@ -47,12 +49,14 @@ public class MemberService {
 		return mapper.selectMember(id);
 	}
 
-	public int updateMember(String id, String address, Date birth, String tel) {
+	public int updateMember(String id, String postno, String address1, String address2, Date birth, String tel) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("birth", birth);
 		map.put("tel", tel);
-		map.put("address", address);
+		map.put("postno", postno);
+		map.put("address1", address1);
+		map.put("address2", address2);
 		return mapper.updateMember(map);
 	}
 	

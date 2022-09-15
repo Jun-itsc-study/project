@@ -27,7 +27,6 @@
 
 		var postno = $("#postno").val();
 		var address1 = $("#address1").val();
-		var address2 = $("#address2").val();
 
 		var tel = $("#tel").val();
 		var acc = $("#acc").prop("checked");
@@ -52,8 +51,6 @@
 		if(tel.length == 0){alert("연락처는 필수 입력사항입니다.");$("#tel").focus();return false;}
 		if(acc == false){alert("약관에 동의해주세요");return false;}
 		
-		var address = postno+"||"+address1+"||"+address2;
-		$("#address").val(address);
     }
     $(function(){
     	$(".findA").click(function(){
@@ -230,7 +227,6 @@
                             	</div>
                                 <input type="text" placeholder="기본 주소" class="checkout__input__add" name="address1" id="address1">
                                 <input type="text" placeholder="상세 주소" name="address2" id="address2">
-                                <input type="hidden" name="address" id="address"> 
                             </div>
                             </div>
                             <div class="checkout__input">

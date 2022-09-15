@@ -23,16 +23,12 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
     function checkRegi(){
-		var postno = $("#postno").val();
 		var address1 = $("#address1").val();
-		var address2 = $("#address2").val();
 
 		var tel = $("#tel").val();	
 		if(address1.length == 0) {alert("주소는 필수 입력사항입니다.");$("#address1").focus();return false;}
 		if(tel.length == 0){alert("연락처는 필수 입력사항입니다.");$("#tel").focus();return false;}
 		
-		var address = postno+"&&"+address1+"&&"+address2;
-		$("#address").val(address);
     }
     
     $(function(){
@@ -151,7 +147,6 @@
                             	</div>
                                 <input type="text" placeholder="기본 주소" class="checkout__input__add" id="address1" value="${address1 }">
                                 <input type="text" placeholder="상세 주소" id="address2" value="${address2 }">
-                                <input type="hidden" name="address" id="address"> 
                             </div>
                             </div>
                             <div class="checkout__input">

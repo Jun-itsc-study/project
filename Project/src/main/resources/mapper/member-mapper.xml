@@ -16,7 +16,9 @@
 		<result property="name" column="name"/>
 		<result property="birth" column="birth"/>
 		<result property="tel" column="tel"/>
-		<result property="address" column="address"/>
+		<result property="postno" column="postno"/>
+		<result property="address1" column="address1"/>
+		<result property="address2" column="address2"/>
 		<result property="vno" column="vno"/>
 		<result property="mileage" column="mileage"/>
 		<result property="totalmileage" column="totalmileage"/>
@@ -52,12 +54,12 @@
 		insert into member 
 		<choose>
 			<when test="birth.equals('1')">
-				(mno, id, pwd, name, tel, address)
-				values(seq_mno.nextval, #{id},#{pwd},#{name},#{tel},#{address})
+				(mno, id, pwd, name, tel, postno, address1, address2)
+				values(seq_mno.nextval, #{id},#{pwd},#{name},#{tel},#{postno},#{address1},#{address})
 			</when>
 			<otherwise>
-				(mno, id, pwd, name, birth, tel, address)
-				values(seq_mno.nextval, #{id},#{pwd},#{name},to_date(#{birth},'RRRR-MM-DD'),#{tel},#{address})
+				(mno, id, pwd, name, birth, tel, postno, address1, address2)
+				values(seq_mno.nextval, #{id},#{pwd},#{name},to_date(#{birth},'RRRR-MM-DD'),#{tel},#{postno},#{address1},#{address})
 			</otherwise>
 		</choose>
 	</insert>
@@ -92,7 +94,7 @@
 	</select>
 	<!-- 회원정보 수정 -->
 	<update id="updateMember" parameterType="map">
-		update member set tel = #{tel}, birth=to_date(#{birth}, 'RRRR-MM-DD'), address=#{address} where id = #{id}
+		update member set tel = #{tel}, birth=to_date(#{birth}, 'RRRR-MM-DD'), postno=#{postno}, address1=#{address1}, address2 = #{address2} where id = #{id}
 	</update>
 	<!-- 비밀번호 변경 -->
 	<update id="updatePwd" parameterType="map">

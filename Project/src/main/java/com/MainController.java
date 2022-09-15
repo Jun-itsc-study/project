@@ -99,11 +99,11 @@ public class MainController {
 	
 	// 회원가입
 	@RequestMapping("register.do")
-	public void register(String id, String pwd, String name, String address,
+	public void register(String id, String pwd, String name, String postno, String address1, String address2,
 			@RequestParam(value = "birth", defaultValue = "1") String birth, String tel, 
 			@RequestParam(value="recommender", defaultValue="1") String recommender, HttpServletResponse res)
 			throws IOException {
-		int result = memberService.register(id, pwd, name, Date.valueOf(birth), tel, address);
+		int result = memberService.register(id, pwd, name, Date.valueOf(birth), tel, postno, address1, address2);
 		if(result == 1) {
 			MemberDTO dto = new MemberDTO();
 			dto.setMno(memberService.selectMember(id).getMno());
@@ -197,20 +197,15 @@ public class MainController {
 	@RequestMapping("updateMember")
 	public String updateMemberView(HttpSession session, Model model) {
 		MemberDTO dto = memberService.selectMember((String) session.getAttribute("id"));
-
-		String add[] = dto.getAddress().split("||");
-		model.addAttribute("postno", add[0]);
-		model.addAttribute("address1", add[1]);
-		model.addAttribute("address2", add[2]);
 		model.addAttribute("dto", dto);
 		return "member/update_member";
 	}
 
 	// 회원정보 수정
 	@RequestMapping("updateMember.do")
-	public void updateMember(String id, String address, String birth, String tel, HttpServletResponse res)
+	public void updateMember(String id, String postno, String address1, String address2, String birth, String tel, HttpServletResponse res)
 			throws IOException {
-		int result = memberService.updateMember(id, address, Date.valueOf(birth), tel);
+		int result = memberService.updateMember(id, postno, address1, address2, Date.valueOf(birth), tel);
 		res.getWriter().write(String.valueOf(result));
 	}
 
@@ -337,6 +332,7 @@ public class MainController {
 	@RequestMapping("noticeList")
 	public String noticeList(Model model) {
 		List<NoticeDTO> list = noticeService.selectNoticeList();
+		System.out.println(list.get(0).getNdate());
 		model.addAttribute("list", list);
 		model.addAttribute("type", "noticeList");
 		return "admin/notice_list";
@@ -351,6 +347,7 @@ public class MainController {
 	//관리자 게시판 등록
 	@RequestMapping("/noticeWrite.do")
 	public String noticeWrite(NoticeDTO dto) {
+		
 		noticeService.insertNotice(dto);
 		return "admin/notice_list";
 	}

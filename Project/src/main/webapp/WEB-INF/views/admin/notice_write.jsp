@@ -42,7 +42,7 @@
 					<div class="card">
 						<div class="card-body">
 							<!-- General Form Elements -->
-							<form class="frmNotice">
+							<form action="noticeWrite.do">
 								<div class="row mb-3">
 									<label class="col-sm-2 col-form-label">제목</label>
 									<div class="col-sm-10">
@@ -52,7 +52,7 @@
 								<div class="row mb-3">
 									<label class="col-sm-2 col-form-label">내용</label>
 									<div class="col-sm-10" style="min-height: 100px;">
-										<textarea class="form-control" name="ncontent"></textarea>
+										<textarea class="form-control tinymce-editor" name="ncontent"></textarea>
 									</div>
 								</div>
 								<div class="row mb-3">
