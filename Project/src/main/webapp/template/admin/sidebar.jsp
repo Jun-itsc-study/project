@@ -114,7 +114,7 @@
 					<a href="noticeList" class="noticeList"> <i class="bi bi-circle"></i><span>공지사항 전체목록</span></a>
 				</li>
 				<li>
-					<a href="#"> <i class="bi bi-circle"></i><span>공지사항 등록</span></a>
+					<a href="noticeWrite" class="noticeWrite"> <i class="bi bi-circle"></i><span>공지사항 등록</span></a>
 				</li>
 			</ul>
 		</li>

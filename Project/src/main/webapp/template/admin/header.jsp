@@ -173,7 +173,7 @@
 						</li>
 
 						<li>
-							<a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+							<a class="dropdown-item d-flex align-items-center" href="#">
 								<i class="bi bi-cart-check"></i> <span>주문 관리</span>
 							</a>
 						</li>
@@ -182,7 +182,7 @@
 							<hr class="dropdown-divider">
 						</li>
 						<li>
-							<a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+							<a class="dropdown-item d-flex align-items-center" href="#">
 								<i class="bi bi-cart4"></i> <span>상품 관리</span>
 							</a>
 						</li>

@@ -21,10 +21,20 @@
 	.btnAdd, .btnList{border:none; background-color:inherit;}
 	.btnList{padding-left:0px;padding-top:6px;}
 	#main{min-height:82vh;}
-	th:nth-last-child(2),th:nth-last-child(4) {width:8%;}
-	th:nth-last-child(5){width:16%;}
+	input{font-size: 14px !important;}
+	th:nth-child(6){width:10%;}
+	th:nth-last-child(3){width:7%;}
+	th:nth-last-child(2),th:nth-last-child(4) {width:6%;}
 	th:last-child {width:5%;}
+	th:nth-child(7) {width:7%;}
+	th:nth-child(8),th:nth-child(9) {width:10%;}
+	input[name='address2']{width:70%;float:left;}
+	.findA{width:25%;float:right;}
+
 </style>
+
+<!-- 주소검색 -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <!-- jqeury -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -91,7 +101,9 @@
 						tag += '<td><input type="text" class="form-control" name="name" value="'+r[i].member.name+'"></td>';
 						tag += '<td><input type="date" class="form-control" name="birth" value="'+r[i].member.birth+'"></td>';
 						tag += '<td><input type="text" class="form-control" name="tel" value="'+r[i].member.tel+'"></td>';
-						tag += '<td><input type="text" class="form-control" name="address" value="'+r[i].member.address+'"></td>';
+						tag += '<td><input type="text" class="form-control" name="postno" value="'+r[i].member.postno+'"></td>';
+						tag += '<td><input type="text" class="form-control" name="address1" value="'+r[i].member.address1+'"></td>';
+						tag += '<td><input type="text" class="form-control" name="address2" value="'+r[i].member.address2+'"></td>';
 						tag += '<td><input type="text" class="form-control" name="vno" value="'+r[i].member.vno+'"></td>';
 						tag += '<td><input type="text" class="form-control" name="vname" value="'+r[i].vip.vname+'"></td>';
 						tag += '<td><input type="text" class="form-control" name="mileage" value="'+r[i].member.mileage+'"></td>';
@@ -115,6 +127,17 @@
 	  		}
     	}); //전화번호 자동 - 추가
 		//②
+		
+		$(".findA").click(function(){
+			var d = $(this).parent();
+    		new daum.Postcode({
+    	        oncomplete: function(data) {
+    	        	d.find("input[name=postno]").val(data.zonecode);
+    	        	d.find("input[name=address1]").val(data.address);
+    	        	d.find("input[name=address2]").focus();
+    	        }
+    	    }).open();
+    	});//주소
 	});
 </script>
 </head>
@@ -147,7 +170,7 @@
 								<option value="name">이름</option>
 								<option value="birth">생년월일</option>
 								<option value="tel">전화번호</option>
-								<option value="address">주소</option>
+								<option value="address1">주소</option>
 								<option value="vno">등급번호</option>
 								<option value="mileage">마일리지</option>
 							</select>
@@ -172,7 +195,9 @@
 										<th scope="col">이름</th>
 										<th scope="col">생년월일</th>
 										<th scope="col">전화번호</th>
-										<th scope="col">주소</th>
+										<th scope="col">우편번호</th>
+										<th scope="col">기본주소</th>
+										<th scope="col">상세주소</th>
 										<th scope="col">등급번호</th>
 										<th scope="col">등급</th>
 										<th scope="col">마일리지</th>
@@ -188,7 +213,9 @@
 										<td><input type="text" class="form-control" name="name" value="${obj.member.name }"></td>
 										<td><input type="date" class="form-control" name="birth" value="${obj.member.birth }"></td>
 										<td><input type="text" class="form-control" name="tel" value="${obj.member.tel }"></td>
-										<td><input type="text" class="form-control" name="address" value="${obj.member.address }"></td>
+										<td><input type="text" class="form-control" name="postno" value="${obj.member.postno }"></td>
+										<td><input type="text" class="form-control" name="address1" value="${obj.member.address1 }"></td>
+										<td><input type="text" class="form-control" name="address2" value="${obj.member.address2 }"><button class="btn findA"><i class="bi bi-search"></i></button></td>
 										<td><input type="text" class="form-control" name="vno" value="${obj.member.vno }"></td>
 										<td><input type="text" class="form-control" name="vname" value="${obj.vip.vname }"></td>
 										<td><input type="text" class="form-control" name="mileage" value="${obj.member.mileage }"></td>

@@ -42,7 +42,7 @@
 					<div class="card">
 						<div class="card-body">
 							<!-- General Form Elements -->
-							<form action="noticeWrite.do">
+							<form action="noticeWrite.do" method="post">
 								<div class="row mb-3">
 									<label class="col-sm-2 col-form-label">제목</label>
 									<div class="col-sm-10">
