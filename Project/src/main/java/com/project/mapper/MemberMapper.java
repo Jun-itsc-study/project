@@ -13,14 +13,26 @@ public interface MemberMapper {
 
 	public int register(Map<String, Object> map);
 
-	public MemberDTO updateMemberView(String id);
+	public MemberDTO selectMember(String id);
 
 	public int updatePwd(Map<String, Object> map);
 
 	public int updateMember(Map<String, Object> map);
 
-	public String findAccount(Map<String, Object> map);
+	public MemberDTO findAccount(Map<String, Object> map);
 
 	public int findChangePwd(Map<String, Object> map);
+
+	public int registerMemberDetail(Map<String, Object> map);
+
+	public String getVip(int vno);
+
+	public int updateLastLogin(int mno);
+
+	public int updatePchange(int mno);
+
+	public int selectVno(int mno);
+
+	public int checkId(String id);
 
 }

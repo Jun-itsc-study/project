@@ -15,14 +15,22 @@ public class MemberDTO {
 	private String address;
 	private int vno;
 	private int mileage;
-	
+	private int totalmileage;
+
 
 	//기본생성자
 	public MemberDTO() {
 		super();
 	}
-	
+
 	//setter getter
+	public int getTotalmileage() {
+		return totalmileage;
+	}
+	
+	public void setTotalmileage(int totalmileage) {
+		this.totalmileage = totalmileage;
+	}
 	public int getMno() {
 		return mno;
 	}
@@ -81,7 +89,10 @@ public class MemberDTO {
 	@Override
 	public String toString() {
 		return "MemberDTO [mno=" + mno + ", id=" + id + ", pwd=" + pwd + ", name=" + name + ", birth=" + birth
-				+ ", tel=" + tel + ", address=" + address + ", vno=" + vno + ", mileage=" + mileage + "]";
+				+ ", tel=" + tel + ", address=" + address + ", vno=" + vno + ", mileage=" + mileage + ", totalmileage="
+				+ totalmileage + "]";
 	}
+
+	
 	
 }

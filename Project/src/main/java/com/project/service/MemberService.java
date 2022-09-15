@@ -36,8 +36,15 @@ public class MemberService {
 		return mapper.register(map);
 	}
 
-	public MemberDTO updateMemberView(String id) {
-		return mapper.updateMemberView(id);
+	public int registerMemberDetail(int mno, String recommender) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("mno", mno);
+		map.put("recommender", recommender);
+		return mapper.registerMemberDetail(map);
+	}
+	
+	public MemberDTO selectMember(String id) {
+		return mapper.selectMember(id);
 	}
 
 	public int updateMember(String id, String address, Date birth, String tel) {
@@ -58,7 +65,7 @@ public class MemberService {
 		return mapper.updatePwd(map);
 	}
 
-	public String findAccount(String id, String name, String tel, String status) {
+	public MemberDTO findAccount(String id, String name, String tel, String status) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("name", name);
@@ -74,5 +81,27 @@ public class MemberService {
 		map.put("pwd", pwd);
 		return mapper.findChangePwd(map);
 	}
+
+	public String getVip(int vno) {
+		return mapper.getVip(vno);
+	}
+
+	public int updateLastLogin(int mno) {
+		return mapper.updateLastLogin(mno);
+	}
+
+	public int updatePchange(int mno) {
+		return mapper.updatePchange(mno);
+	}
+
+	public int selectVno(int mno) {
+		return mapper.selectVno(mno);
+	}
+
+	public int checkId(String id) {
+		return mapper.checkId(id);
+	}
+
+
 
 }

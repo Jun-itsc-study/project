@@ -2,26 +2,34 @@ package com;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.dto.JoinDTO;
 import com.project.dto.MemberDTO;
+import com.project.dto.MemberVipDTO;
+import com.project.service.AdminMemberService;
 import com.project.service.MemberService;
 
 @Controller
 public class MainController {
 	private MemberService memberService;
+	private AdminMemberService adminMemberService;
 
-	public MainController(MemberService memberService) {
+	public MainController(MemberService memberService, AdminMemberService adminMemberService) {
 		super();
 		this.memberService = memberService;
+		this.adminMemberService = adminMemberService;
 	}
 
 	// 메인페이지
@@ -30,12 +38,17 @@ public class MainController {
 		model.addAttribute("index", "index");
 		return "index";
 	}
+	
+	@RequestMapping("test")
+	public String test() {
+		return "test_cart";
+	}
 
 	//기본-----------------------------------------------------------
 	// 로그인페이지
 	@RequestMapping("login")
 	public String loginView() {
-		return "login";
+		return "account/login";
 	}
 
 	// 로그인
@@ -44,13 +57,15 @@ public class MainController {
 		MemberDTO dto = memberService.login(id, pwd);
 		if (dto != null) {
 			session.setAttribute("login", true);
-			dto.setPwd(null);
-			session.setAttribute("loginDTO", dto);
+			session.setAttribute("loginDTO",dto);
 			session.setAttribute("id", id);
+			session.setAttribute("mno", dto.getMno());
+			int result = memberService.updateLastLogin(dto.getMno());
+			//업데이트 실패 시 로그파일 작성?
 			return "redirect:/";
 		} else {
 			session.setAttribute("login", false);
-			return "login";
+			return "account/login";
 		}
 	}
 
@@ -58,7 +73,9 @@ public class MainController {
 	@RequestMapping("logout.do")
 	public String logout(HttpSession session) {
 		session.removeAttribute("login");
-		session.removeAttribute("dto");
+		session.removeAttribute("loginDTO");
+		session.removeAttribute("id");
+		session.removeAttribute("mno");
 		session.invalidate();
 		return "redirect:/";
 	}
@@ -66,22 +83,61 @@ public class MainController {
 	// 회원가입 페이지
 	@RequestMapping("register")
 	public String registerView() {
-		return "register";
+		return "account/register";
 	}
-
+	
+	//id중복체크 | 추천인 계정 체크
+	@RequestMapping("idCheck")
+	public void idCheck(String id, HttpServletResponse res) throws IOException {
+		int result = memberService.checkId(id);
+		res.getWriter().write(String.valueOf(result));
+	}
+	
 	// 회원가입
 	@RequestMapping("register.do")
 	public void register(String id, String pwd, String name, String address,
-			@RequestParam(value = "birth", defaultValue = "1") String birth, String tel, HttpServletResponse res)
+			@RequestParam(value = "birth", defaultValue = "1") String birth, String tel, 
+			@RequestParam(value="recommender", defaultValue="1") String recommender, HttpServletResponse res)
 			throws IOException {
 		int result = memberService.register(id, pwd, name, Date.valueOf(birth), tel, address);
+		if(result == 1) {
+			MemberDTO dto = new MemberDTO();
+			dto.setMno(memberService.selectMember(id).getMno());
+			memberService.registerMemberDetail(dto.getMno(), recommender);
+			dto.setMileage(500);
+			adminMemberService.updateMileage(dto);
+			adminMemberService.updateMileageLog(dto.getMno(), 500, "회원가입 마일리지 500");
+			
+			if(!recommender.equals("1")) {
+				//신규가입회원 추천인 마일리지 등록
+				dto.setMileage(dto.getMileage()+1000);
+				adminMemberService.updateMileage(dto);
+				adminMemberService.updateMileageLog(dto.getMno(), 1000, "추천인 등록 마일리지 1000");
+				
+				//추천대상자 마일리지 등록
+				dto.setMno(memberService.selectMember(recommender).getMno());
+				dto.setMileage(dto.getMileage()+500);
+				adminMemberService.updateMileage(dto);
+				adminMemberService.updateMileageLog(dto.getMno(), 500, "추천인 등록 마일리지 500");
+				dto.setVno(memberService.selectVno(dto.getMno()));
+				if(dto.getVno() < 2) {
+					//다음 등급 기준 받아오기
+					int vcondition = adminMemberService.selectVcondition(dto.getVno()+1);
+					//현재 누적마일리지와 비교
+					if(dto.getTotalmileage() >= vcondition) {
+						//이상이면 등급 변경
+						adminMemberService.updateVip(dto.getMno(),dto.getVno()+1);
+					}
+				}
+			}
+		}
 		res.getWriter().write(String.valueOf(result));
 	}
-
+	
 	// 아이디,비밀번호 찾기페이지
 	@RequestMapping("findAccount")
 	public String findAccountView() {
-		return "find_account";
+		return "account/find_account";
 	}
 
 	// 아이디 찾기(비밀번호는 ID정보만 보내기)
@@ -90,46 +146,60 @@ public class MainController {
 			throws IOException {
 		res.setContentType("text/html; charset=UTF-8");
 		JSONObject obj = new JSONObject();
-		String fid = memberService.findAccount(id, name, tel, status);
-		int result = fid != null ? 1 : 0;
+		MemberDTO dto = memberService.findAccount(id, name, tel, status);
+		int result = dto.getId() != null ? 1 : 0;
 		obj.put("result", result);
-		obj.put("id", fid);
+		obj.put("dto", dto);
 		res.getWriter().print(obj);
 
 	}
 
 	// 비밀번호찾기 > 변경하기
 	@RequestMapping("findChangePwd.do")
-	public void findChangePwd(String id2, String pwd, HttpServletResponse res) throws IOException {
+	public void findChangePwd(String mno, String id2, String pwd, HttpServletResponse res) throws IOException {
 		int result = memberService.findChangePwd(id2, pwd);
+		
+		if(result == 1) {memberService.updatePchange(Integer.parseInt(mno));}
 		res.getWriter().write(String.valueOf(result));
-
 	}
 
 	//멤버-----------------------------------------------------------
 	// 회원정보페이지
 	@RequestMapping("memberInfo")
-	public String memberInfo() {
+	public String memberInfo(Model model, HttpSession session) {
 		//마이페이지 들어갈 때
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		model.addAttribute("year",year);
+		MemberDTO dto = (MemberDTO)session.getAttribute("loginDTO");
+		if(dto == null) {return "redirect:/";}
 		//장바구니 정보
-		//주문목록/배송정보
-		//등급정보 - 현재등급 - 다음 등급까지 얼마나 남았는지
-		//문의내역 정보
+		//select c.cno, c.ea, p.pno, p.pname from cart c, product p where c.pno = p.pno and mno = #{mno}
+		//model.addAttribute("cartList",cartList);
 		
-		return "member_info";
+		//주문목록/배송정보
+		//
+		//model.addAttribute("orderList",orderList);
+		
+		//등급정보 - 현재등급 - 다음 등급까지 얼마나 남았는지
+		String vip = memberService.getVip(dto.getVno());
+		model.addAttribute("vip",vip);
+		//문의내역 정보
+		//select * from qna where mno = #{mno}
+		//model.addAttribute("qnaList",qnaList);
+		return "member/member_info";
 	}
 
 	// 회원정보 수정 페이지
 	@RequestMapping("updateMember")
 	public String updateMemberView(HttpSession session, Model model) {
-		MemberDTO dto = memberService.updateMemberView((String) session.getAttribute("id"));
+		MemberDTO dto = memberService.selectMember((String) session.getAttribute("id"));
 
-		String add[] = dto.getAddress().split("&&");
+		String add[] = dto.getAddress().split("||");
 		model.addAttribute("postno", add[0]);
 		model.addAttribute("address1", add[1]);
 		model.addAttribute("address2", add[2]);
 		model.addAttribute("dto", dto);
-		return "update_member";
+		return "member/update_member";
 	}
 
 	// 회원정보 수정
@@ -143,16 +213,102 @@ public class MainController {
 	// 비밀번호 수정 페이지
 	@RequestMapping("updatePwd")
 	public String updatePwdView() {
-		return "update_pwd";
+		return "member/update_pwd";
 	}
 
 	// 비밀번호 수정
 	@RequestMapping("updatePwd.do")
 	public void updatePwd(HttpSession session, String pwd, String pwd2, HttpServletResponse res) throws IOException {
-		int result = memberService.updatePwd((String) session.getAttribute("id"), pwd, pwd2);
+		String id = (String) session.getAttribute("id");
+		int mno = (Integer)session.getAttribute("mno");
+		int result = memberService.updatePwd(id, pwd, pwd2);
+		if(result == 1) {
+			int r = memberService.updatePchange(mno);
+			//업데이트 실패 시 로그
+		}
 		res.getWriter().write(String.valueOf(result));
 	}
 	
+	//관리자-----------------------------------------------------------
+	//관리자 메인페이지
+	@RequestMapping("admin")
+	public String adminPage() {
+		return "admin/admin_index";
+	}
+	
+	@RequestMapping("memberManage") // 전체 회원정보 화면
+	public String memberManageView(Model model) {
+		List<JoinDTO> list = adminMemberService.selectAllMember();
+		model.addAttribute("list", list);
+		model.addAttribute("type","memberManage");
+		return "admin/member_manage";
+	}
+	
+//	@RequestMapping("memberInsert.do")
+//	public void memberInsert(MemberDTO dto,HttpServletResponse response)  throws IOException{
+//		int result = adminMemberService.insertMember(dto);
+//		response.getWriter().write(String.valueOf(result));
+//	}
+	
+	@RequestMapping("memberDelete.do")
+	public void memberDelete(int mno,HttpServletResponse response) throws IOException {
+		int result = adminMemberService.deleteMember(mno);
+		response.getWriter().write(String.valueOf(result));
+	}
+	
+	@RequestMapping("memberUpdate.do")
+	public void memberUpdate(MemberDTO dto, HttpServletResponse response) throws IOException {
+		int result = adminMemberService.updateMember(dto);
+		response.getWriter().write(String.valueOf(result));
+	}
+	
+	@RequestMapping("memberSearch.do")
+	public ResponseEntity<List<JoinDTO>> memberSearch(String kind, String search) {
+		List<JoinDTO> list;
+		if(search.equals("") || search == null) list = adminMemberService.selectAllMember(); 
+		else list = adminMemberService.searchMember(kind, search);
+		return ResponseEntity.ok(list);
+	}
+	
+	@RequestMapping("vipManage")
+	public String vipManage(Model model) {
+		List<MemberVipDTO> list = adminMemberService.selectAllVip();
+		System.out.println(list.toString());
+		model.addAttribute("list",list);
+		model.addAttribute("type","vipManage");
+		return "admin/vip_manage";
+	}
+	
+	@RequestMapping("mileageManage")
+	public String mileageManage(Model model) {
+		List<JoinDTO> list = adminMemberService.selectAllMember();
+		model.addAttribute("list", list);
+		model.addAttribute("type","mileageManage");
+		return "admin/mileage_manage";
+	}
+	
+	@RequestMapping("mileageUpdate.do")
+	public void mileageUpdate(MemberDTO dto, int cmile, String mlog, HttpServletResponse response) throws IOException {
+		dto.setMileage(dto.getMileage()+cmile);
+		dto.setTotalmileage(dto.getTotalmileage()+cmile);
+		int result = adminMemberService.updateMileage(dto);
+		if(result == 1) {
+			adminMemberService.updateMileageLog(dto.getMno(), cmile, mlog);
+			if(dto.getVno() < 2) {
+				//다음 등급 기준 받아오기
+				int vcondition = adminMemberService.selectVcondition(dto.getVno()+1);
+				//현재 누적마일리지와 비교
+				if(dto.getTotalmileage() >= vcondition) {
+					//이상이면 등급 변경
+					adminMemberService.updateVip(dto.getMno(),dto.getVno()+1);
+				}
+			}
+		}
+		response.getWriter().write(String.valueOf(result));
+	}
 	//쇼핑-----------------------------------------------------------
-
+	@RequestMapping("shopList")
+	public String shopList() {
+		return "shop/shop_list";
+	}
 }
