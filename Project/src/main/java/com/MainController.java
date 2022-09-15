@@ -18,18 +18,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.project.dto.JoinDTO;
 import com.project.dto.MemberDTO;
 import com.project.dto.MemberVipDTO;
+import com.project.dto.QnaDTO;
 import com.project.service.AdminMemberService;
 import com.project.service.MemberService;
+import com.project.service.QnaService;
 
 @Controller
 public class MainController {
 	private MemberService memberService;
 	private AdminMemberService adminMemberService;
-
-	public MainController(MemberService memberService, AdminMemberService adminMemberService) {
+	private QnaService qnaService;
+	
+	public MainController(MemberService memberService, AdminMemberService adminMemberService, QnaService qnaService) {
 		super();
 		this.memberService = memberService;
 		this.adminMemberService = adminMemberService;
+		this.qnaService = qnaService;
+		
 	}
 
 	// 메인페이지
@@ -230,33 +235,27 @@ public class MainController {
 	public String adminPage() {
 		return "admin/admin_index";
 	}
-	
-	@RequestMapping("memberManage") // 전체 회원정보 화면
+	//회원관리페이지
+	@RequestMapping("memberManage")
 	public String memberManageView(Model model) {
 		List<JoinDTO> list = adminMemberService.selectAllMember();
 		model.addAttribute("list", list);
 		model.addAttribute("type","memberManage");
 		return "admin/member_manage";
 	}
-	
-//	@RequestMapping("memberInsert.do")
-//	public void memberInsert(MemberDTO dto,HttpServletResponse response)  throws IOException{
-//		int result = adminMemberService.insertMember(dto);
-//		response.getWriter().write(String.valueOf(result));
-//	}
-	
+	//회원삭제
 	@RequestMapping("memberDelete.do")
 	public void memberDelete(int mno,HttpServletResponse response) throws IOException {
 		int result = adminMemberService.deleteMember(mno);
 		response.getWriter().write(String.valueOf(result));
 	}
-	
+	//회원정보수정
 	@RequestMapping("memberUpdate.do")
 	public void memberUpdate(MemberDTO dto, HttpServletResponse response) throws IOException {
 		int result = adminMemberService.updateMember(dto);
 		response.getWriter().write(String.valueOf(result));
 	}
-	
+	//회원관리페이지에서 검색
 	@RequestMapping("memberSearch.do")
 	public ResponseEntity<List<JoinDTO>> memberSearch(String kind, String search) {
 		List<JoinDTO> list;
@@ -264,7 +263,7 @@ public class MainController {
 		else list = adminMemberService.searchMember(kind, search);
 		return ResponseEntity.ok(list);
 	}
-	
+	//등급 혜택 관리
 	@RequestMapping("vipManage")
 	public String vipManage(Model model) {
 		List<MemberVipDTO> list = adminMemberService.selectAllVip();
@@ -273,7 +272,7 @@ public class MainController {
 		model.addAttribute("type","vipManage");
 		return "admin/vip_manage";
 	}
-	
+	//회원 마일리지 관리 페이지
 	@RequestMapping("mileageManage")
 	public String mileageManage(Model model) {
 		List<JoinDTO> list = adminMemberService.selectAllMember();
@@ -281,7 +280,7 @@ public class MainController {
 		model.addAttribute("type","mileageManage");
 		return "admin/mileage_manage";
 	}
-	
+	//회원 마일리지 수정
 	@RequestMapping("mileageUpdate.do")
 	public void mileageUpdate(MemberDTO dto, int cmile, String mlog, HttpServletResponse response) throws IOException {
 		dto.setMileage(dto.getMileage()+cmile);
@@ -301,6 +300,35 @@ public class MainController {
 		}
 		response.getWriter().write(String.valueOf(result));
 	}
+	
+	//관리자 QnA 페이지
+	@RequestMapping("qnaMain")
+	public String qna(Model model) {
+		List<JoinDTO> list = qnaService.selectAllQna();
+		model.addAttribute("list", list);
+		model.addAttribute("type","qna");
+		return "admin/qna_main";
+	}
+	//문의 1건 보기
+	@RequestMapping("qnaDetail")
+	public String qanswer(int qno, Model model) {
+		JoinDTO dto = qnaService.selectQna(qno);
+		model.addAttribute("dto", dto);
+		model.addAttribute("type","qna");
+		
+		if(dto.getQna().getQstatus() == 0) {
+			qnaService.changeQstatus(qno,1);
+		}
+		return "admin/qna_detail";
+	}
+	//문의 답변
+	@RequestMapping("qanswer.do")
+	public void insertQanswer(int qno, String qanswer, HttpServletResponse res) throws IOException {
+		int result = qnaService.insertQanswer(qno,qanswer);
+		if(result == 1) qnaService.changeQstatus(qno,2);
+		res.getWriter().write(String.valueOf(result));
+	}
+	
 	//쇼핑-----------------------------------------------------------
 	@RequestMapping("shopList")
 	public String shopList() {

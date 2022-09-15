@@ -100,7 +100,7 @@
 		
 		<!-- 문의내역 관리 Nav -->
 		<li class="nav-item">
-			<a class="nav-link collapsed qna" href="#"> <i class="bi bi-question-circle"></i> <span>문의내역 관리</span></a>
+			<a class="nav-link collapsed qna" href="qnaMain"> <i class="bi bi-question-circle"></i> <span>문의내역 관리</span></a>
       	</li>
 		<!-- End 문의내역 관리 Nav -->
 

@@ -7,6 +7,7 @@ public class JoinDTO {
 	private MemberDetailDTO memberDetail;
 	private MemberDTO member;
 	private MemberVipDTO vip;
+	private QnaDTO qna;
 	
 	public JoinDTO() {
 		super();
@@ -29,6 +30,12 @@ public class JoinDTO {
 	}
 	public void setVip(MemberVipDTO vip) {
 		this.vip = vip;
+	}
+	public QnaDTO getQna() {
+		return qna;
+	}
+	public void setQna(QnaDTO qna) {
+		this.qna = qna;
 	}
 	
 	

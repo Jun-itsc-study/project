@@ -25,7 +25,7 @@
 					<div class="header__top__left">
 						<ul>
 							<li><i class="fa fa-envelope"></i> admin@project.com</li>
-							<li>테스트문구위치</li>
+							<li><a href="https://github.com/Jun-itsc-study/project"><i class="fa fa-github"></i></a></li>
 						</ul>
 					</div>
 				</div>

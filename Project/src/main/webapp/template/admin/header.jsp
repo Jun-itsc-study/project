@@ -192,7 +192,7 @@
 						</li>
 
 						<li>
-							<a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+							<a class="dropdown-item d-flex align-items-center" href="qnaMain">
 								<i class="bi bi-headset"></i>
 								<span>문의내역 관리</span>
 							</a>
