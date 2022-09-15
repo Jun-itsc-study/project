@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.project.dto.JoinDTO;
 import com.project.dto.MemberDTO;
 import com.project.dto.MemberVipDTO;
+import com.project.dto.NoticeDTO;
 import com.project.dto.QnaDTO;
 import com.project.service.AdminMemberService;
 import com.project.service.MemberService;
+import com.project.service.NoticeService;
 import com.project.service.QnaService;
 
 @Controller
@@ -28,12 +30,14 @@ public class MainController {
 	private MemberService memberService;
 	private AdminMemberService adminMemberService;
 	private QnaService qnaService;
+	private NoticeService noticeService;
 	
-	public MainController(MemberService memberService, AdminMemberService adminMemberService, QnaService qnaService) {
+	public MainController(MemberService memberService, AdminMemberService adminMemberService, QnaService qnaService, NoticeService noticeService) {
 		super();
 		this.memberService = memberService;
 		this.adminMemberService = adminMemberService;
 		this.qnaService = qnaService;
+		this.noticeService = noticeService;
 		
 	}
 
@@ -329,6 +333,71 @@ public class MainController {
 		res.getWriter().write(String.valueOf(result));
 	}
 	
+	//공지사항 페이지
+	@RequestMapping("noticeList")
+	public String noticeList(Model model) {
+		List<NoticeDTO> list = noticeService.selectNoticeList();
+		model.addAttribute("list", list);
+		model.addAttribute("type", "noticeList");
+		return "admin/notice_list";
+	}
+	
+	//관리자 게시판 등록페이지
+	@RequestMapping("/noticeWrite")
+	public String noticeWriteView(Model model) {
+		model.addAttribute("type", "noticeWrite");
+		return "admin/notice_write";
+	}
+	//관리자 게시판 등록
+	@RequestMapping("/noticeWrite.do")
+	public String noticeWrite(NoticeDTO dto) {
+		noticeService.insertNotice(dto);
+		return "admin/notice_list";
+	}
+//	
+//	//관리자 게시판 삭제
+//	@RequestMapping("deleteNotice.do")
+//	public String deleteNotice(int nno) {
+//		
+//		System.out.println("삭제 번호 : "+ nno);
+//		int result = boardService.deleteNotice(nno);
+//		
+//		System.out.println("1이면 삭제한거임 : "+result);
+//		
+////		try {
+////			PrintWriter out = response.getWriter();
+////			response.setContentType("text/html; charset=utf=8");
+////			out.println("<script language='javascript'>"); 
+////			out.println("alert('완료!')"); 
+////			out.println("</script>");
+////			out.flush();
+////			
+////		} catch (IOException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+//		return "redirect:/borderIndex.do";
+//	}
+//	
+//	//관리자 수정할 게시판 번호(nno) 불러와서 뿌려주는곳
+//	@RequestMapping("updateNotice.do")
+//	public String updateNotice(int nno,Model model) {
+//		System.out.println("수정할 번호 : "+nno);
+//		BoardDTO dto = boardService.selectBoard(nno);
+//		System.out.println(dto);
+//		model.addAttribute("dto", dto);
+//		
+//		return "borderUpdate";
+////		return "/template/UpdateBoarder";
+//	}
+//	//관리자 수정할 데이터를 받은후 수정할 페이지
+//	@RequestMapping("updateBorder.do")
+//	public String updateBorder(int nno,String nname, String ncontent) {
+//		System.out.println("start	");
+//		int result = boardService.updateBoarder(nno, nname, ncontent);
+//		System.out.println(result);
+//		return "redirect:/borderIndex.do";
+//	}
 	//쇼핑-----------------------------------------------------------
 	@RequestMapping("shopList")
 	public String shopList() {

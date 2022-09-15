@@ -12,10 +12,8 @@
 </head>
 
 <body>
-	<jsp:include page="/template/shop/header.jsp"></jsp:include>
-	<jsp:include page="/template/shop/bar.jsp"></jsp:include>
-	<jsp:include page="/template/shop/preloader.jsp"></jsp:include>
-
+	<jsp:include page="/template/admin/header.jsp" />
+	<jsp:include page="/template/admin/sidebar.jsp" />
 	<main id="main" class="main">
 
 		<div class="pagetitle">
@@ -35,9 +33,10 @@
 		</div>
 	</main>
 	<!-- End #main -->
-	<jsp:include page="/template/shop/footer.jsp"></jsp:include>
+	<!-- Footer -->
+	<jsp:include page="/template/admin/footer.jsp"></jsp:include>
 	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-	<jsp:include page="/template/shop/js.jsp"></jsp:include>
+	<jsp:include page="/template/admin/js.jsp"></jsp:include>
 </body>
 
 </html>

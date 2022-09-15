@@ -49,12 +49,4 @@
 		 update qna set qanswer=#{qanswer}, qadate=sysdate where qno = #{qno}
 	</update>
 	
-	
-	
-	
-	
-	
-	
-	
-	
 </mapper>

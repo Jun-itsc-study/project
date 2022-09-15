@@ -111,7 +111,7 @@
 			</a>
 			<ul id="notice-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
 				<li>
-					<a href="#"> <i class="bi bi-circle"></i><span>공지사항 전체목록</span></a>
+					<a href="noticeList" class="noticeList"> <i class="bi bi-circle"></i><span>공지사항 전체목록</span></a>
 				</li>
 				<li>
 					<a href="#"> <i class="bi bi-circle"></i><span>공지사항 등록</span></a>
