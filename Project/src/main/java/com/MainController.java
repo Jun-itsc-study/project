@@ -38,11 +38,6 @@ public class MainController {
 		model.addAttribute("index", "index");
 		return "index";
 	}
-	
-	@RequestMapping("test")
-	public String test() {
-		return "test_cart";
-	}
 
 	//기본-----------------------------------------------------------
 	// 로그인페이지

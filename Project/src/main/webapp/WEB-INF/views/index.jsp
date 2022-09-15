@@ -482,7 +482,6 @@
         </div>
     </section>
     <!-- Blog Section End -->
-<jsp:include page="/template/shop/footer.jsp"></jsp:include>
 <jsp:include page="/template/shop/js.jsp"></jsp:include>
 </body>
 </html>
