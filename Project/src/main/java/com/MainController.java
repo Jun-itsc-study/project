@@ -2,10 +2,7 @@ package com;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -331,22 +328,22 @@ public class MainController {
 		res.getWriter().write(String.valueOf(result));
 	}
 	
-//	//문의글 삭제
-//	@RequestMapping("deleteQna.do")
-//	public String deleteQna(int nno, HttpSession session) {
-//		MemberDTO dto = (MemberDTO)session.getAttribute("loginDTO");
-//		//관리자면 제목 변경 + 내용 지우고 사유 쓰기
-//		if(dto.getVno() == 4) {
-//			
-//			return "redirect:noticeList";
-//		}
-//		//사용자면 바로 지우기
-//		else {
-//			int result = noticeService.deleteNotice(nno);
-//			
-//			return null;
-//		}
-//	}
+	//문의글 삭제
+	@RequestMapping("deleteQna.do")
+	public void deleteQna(QnaDTO qdto, HttpSession session, HttpServletResponse res) throws IOException {
+		MemberDTO dto = (MemberDTO)session.getAttribute("loginDTO");
+		//관리자면 제목 변경 + 내용 지우고 사유 쓰기
+		if(dto.getVno() == 4) {
+			qdto.setQtitle("관리자에 의해 삭제된 문의글입니다. 사유는 내용을 확인해주세요.");
+			int result = qnaService.adminDeleteQna(qdto);
+			res.getWriter().write(String.valueOf(result));
+		}
+		//사용자면 바로 지우기
+		else {
+			int result = qnaService.deleteQna(qdto.getQno());
+			res.getWriter().write(String.valueOf(result));
+		}
+	}
 	
 	//공지사항 페이지
 	@RequestMapping("noticeList")
@@ -378,7 +375,7 @@ public class MainController {
 		return "redirect:/noticeList";
 	}
 
-	//관리자 수정할 게시판 번호(nno) 불러와서 뿌려주는곳
+	//공지사항 수정 페이지
 	@RequestMapping("updateNotice")
 	public String updateNoticeView(int nno, Model model) {
 		NoticeDTO dto = noticeService.selectNotice(nno);
@@ -386,7 +383,7 @@ public class MainController {
 		return "admin/notice_update";
 	}
 	
-	//관리자 수정할 데이터를 받은후 수정할 페이지
+	//공지사항 수정
 	@RequestMapping("updateNotice.do")
 	public String updateBorder(NoticeDTO dto) {
 		noticeService.updateNotice(dto);

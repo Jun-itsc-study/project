@@ -12,9 +12,9 @@
 
 <!-- custom css -->
 <style type="text/css">
-	th:nth-child(1) {width:10%;}
-	th:nth-child(2) {width:15%;}
-	th:nth-child(3) {width:35%;}
+	th:nth-child(1) {width:5%;}
+	th:nth-child(2) {width:10%;}
+	th:nth-child(3) {width:45%;}
 	th:nth-child(4) {width:30%;}
 	th:nth-child(5) {width:10%;}
 </style>
@@ -50,7 +50,7 @@
 							<table class="table">
 								<thead>
 									<tr>
-										<th scope="col">문의번호</th>
+										<th scope="col">#</th>
 										<th scope="col">ID</th>
 										<th scope="col">문의제목</th>
 										<th scope="col">문의 작성일</th>
@@ -72,8 +72,11 @@
 												<c:when test="${dto.qna.qstatus == 1 }">
 													<td>읽음</td>
 												</c:when>
-												<c:otherwise>
+												<c:when test="${dto.qna.qstatus == 2 }">
 													<td>답변 완료</td>
+												</c:when>
+												<c:otherwise>
+													<td>관리자삭제</td>
 												</c:otherwise>
 											</c:choose>
 										</tr>

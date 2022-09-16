@@ -18,5 +18,9 @@ public interface QnaMapper {
 	int changeQstatus(Map<String, Object> map);
 	
 	int insertQanswer(Map<String, Object> map);
+
+	int deleteQna(int qno);
+
+	int adminDeleteQna(QnaDTO qdto);
 	
 }

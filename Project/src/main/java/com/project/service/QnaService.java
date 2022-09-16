@@ -39,6 +39,14 @@ public class QnaService {
 		map.put("qanswer", qanswer);
 		return mapper.insertQanswer(map);
 	}
+
+	public int deleteQna(int qno) {
+		return mapper.deleteQna(qno);
+	}
+
+	public int adminDeleteQna(QnaDTO qdto) {
+		return mapper.adminDeleteQna(qdto);
+	}
 	
 	
 

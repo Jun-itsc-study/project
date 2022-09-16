@@ -49,4 +49,12 @@
 		 update qna set qanswer=#{qanswer}, qadate=sysdate where qno = #{qno}
 	</update>
 	
+	<delete id="deleteQna" parameterType="int">
+		delete from qna where qno = #{qno}
+	</delete>
+	
+	<update id="adminDeleteQna" parameterType="qna">
+		update qna set qtitle = #{qtitle}, qcontent = #{qcontent}, qstatus = 3, qanswer=NULL, qadate=NULL where qno = #{qno}
+	</update>
+	
 </mapper>
