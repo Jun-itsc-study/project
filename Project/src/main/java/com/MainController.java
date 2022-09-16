@@ -328,6 +328,23 @@ public class MainController {
 		res.getWriter().write(String.valueOf(result));
 	}
 	
+//	//문의글 삭제
+//	@RequestMapping("deleteQna.do")
+//	public String deleteQna(int nno, HttpSession session) {
+//		MemberDTO dto = (MemberDTO)session.getAttribute("loginDTO");
+//		//관리자면 제목 변경 + 내용 지우고 사유 쓰기
+//		if(dto.getVno() == 4) {
+//			
+//			return "redirect:noticeList";
+//		}
+//		//사용자면 바로 지우기
+//		else {
+//			int result = noticeService.deleteNotice(nno);
+//			
+//			return null;
+//		}
+//	}
+	
 	//공지사항 페이지
 	@RequestMapping("noticeList")
 	public String noticeList(Model model) {
@@ -338,44 +355,28 @@ public class MainController {
 		return "admin/notice_list";
 	}
 	
-	//관리자 게시판 등록페이지
-	@RequestMapping("/noticeWrite")
+	//공지사항 등록페이지
+	@RequestMapping("noticeWrite")
 	public String noticeWriteView(Model model) {
 		model.addAttribute("type", "noticeWrite");
 		return "admin/notice_write";
 	}
-	//관리자 게시판 등록
-	@RequestMapping("/noticeWrite.do")
+	
+	//공지사항 등록
+	@RequestMapping("noticeWrite.do")
 	public String noticeWrite(NoticeDTO dto) {
-		
 		noticeService.insertNotice(dto);
 		return "admin/notice_list";
 	}
-//	
-//	//관리자 게시판 삭제
-//	@RequestMapping("deleteNotice.do")
-//	public String deleteNotice(int nno) {
-//		
-//		System.out.println("삭제 번호 : "+ nno);
-//		int result = boardService.deleteNotice(nno);
-//		
-//		System.out.println("1이면 삭제한거임 : "+result);
-//		
-////		try {
-////			PrintWriter out = response.getWriter();
-////			response.setContentType("text/html; charset=utf=8");
-////			out.println("<script language='javascript'>"); 
-////			out.println("alert('완료!')"); 
-////			out.println("</script>");
-////			out.flush();
-////			
-////		} catch (IOException e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
-//		return "redirect:/borderIndex.do";
-//	}
-//	
+	
+	//공지사항 삭제
+	@RequestMapping("deleteNotice.do")
+	public String deleteNotice(int nno, HttpSession session) {
+		noticeService.deleteNotice(nno);
+		return "redirect:noticeList";
+	}
+
+	
 //	//관리자 수정할 게시판 번호(nno) 불러와서 뿌려주는곳
 //	@RequestMapping("updateNotice.do")
 //	public String updateNotice(int nno,Model model) {

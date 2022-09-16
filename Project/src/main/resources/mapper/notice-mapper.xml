@@ -13,11 +13,11 @@
 		insert into notice(nno, nname, ncontent) values(seq_nno.nextval, #{nname},#{ncontent})
 	</insert>
 	
-<!-- 	<delete id="deleteNotice" parameterType="int">
+ 	<delete id="deleteNotice" parameterType="int">
 		delete from notice where nno = #{nno}
 	</delete>
 	
-	<select id="selectBoard" resultType="board">
+<!--	<select id="selectBoard" resultType="board">
 		select * from notice where nno = #{nno}
 	</select>
 	<update id="updateBoarder" parameterType="map">

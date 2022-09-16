@@ -25,10 +25,10 @@ public class NoticeService {
 		return mapper.insertNotice(dto);
 	}
 	
-//	public int deleteNotice(int nno) {
-//		return mapper.deleteNotice(nno);
-//	}
-//
+	public int deleteNotice(int nno) {
+		return mapper.deleteNotice(nno);
+	}
+
 //	public NoticeDTO selectBoard(int nno) {
 //		return mapper.selectBoard(nno);
 //	}

@@ -23,7 +23,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(function(){
-
+			
 		})
 	</script>
 </head>
@@ -76,7 +76,7 @@
 										<div class="accordion-body">
 											<input type="hidden" name="nno" value="${obj.nno }">
 											<button type="button" class="btnUpdate btn"><i class="ri-edit-line"></i></button>
-											<button type="button" class="btnDelete btn"><i class="ri-delete-bin-2-line"></i></button>
+											<button type="button" class="btnDelete btn" onclick="location.href='deleteNotice.do?nno=${obj.nno}'"><i class="ri-delete-bin-2-line"></i></button>
 										</div>
 									</div>
 								</div>

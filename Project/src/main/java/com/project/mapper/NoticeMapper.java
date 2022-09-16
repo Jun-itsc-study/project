@@ -10,13 +10,11 @@ import com.project.dto.NoticeDTO;
 @Mapper
 public interface NoticeMapper {
 
-
-	int deleteNotice(int nno);
-
 	List<NoticeDTO> selectNoticeList();
 
 	int insertNotice(NoticeDTO dto);
 
+	int deleteNotice(int nno);
 
 //	BoardDTO selectBoard(int nno);
 //
