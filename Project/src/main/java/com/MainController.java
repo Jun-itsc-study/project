@@ -366,7 +366,7 @@ public class MainController {
 	@RequestMapping("noticeWrite.do")
 	public String noticeWrite(NoticeDTO dto) {
 		noticeService.insertNotice(dto);
-		return "admin/notice_list";
+		return "redirect:noticeList";
 	}
 	
 	//공지사항 삭제
