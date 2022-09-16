@@ -2,7 +2,10 @@ package com;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -349,7 +352,6 @@ public class MainController {
 	@RequestMapping("noticeList")
 	public String noticeList(Model model) {
 		List<NoticeDTO> list = noticeService.selectNoticeList();
-		System.out.println(list.get(0).getNdate());
 		model.addAttribute("list", list);
 		model.addAttribute("type", "noticeList");
 		return "admin/notice_list";

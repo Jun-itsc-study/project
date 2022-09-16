@@ -6,7 +6,7 @@
 	
 	
 	<select id="selectNoticeList" resultType="notice">
-		select * from notice
+		select * from notice order by nno desc
 	</select>
 	
 	<insert id="insertNotice" parameterType="notice">

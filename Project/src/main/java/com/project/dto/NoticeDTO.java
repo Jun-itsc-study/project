@@ -9,7 +9,7 @@ public class NoticeDTO {
 	private int nno;
 	private String nname;
 	private String ncontent;
-	private Date ndate;
+	private String ndate;
 	
 	public NoticeDTO() {
 		super();
@@ -39,11 +39,11 @@ public class NoticeDTO {
 		this.ncontent = ncontent;
 	}
 
-	public Date getNdate() {
+	public String getNdate() {
 		return ndate;
 	}
 
-	public void setNdate(Date ndate) {
+	public void setNdate(String ndate) {
 		this.ndate = ndate;
 	}
 
