@@ -16,9 +16,9 @@ public interface NoticeMapper {
 
 	int deleteNotice(int nno);
 
-//	BoardDTO selectBoard(int nno);
-//
-//	int updateBoarder(Map<String, Object> map);
+	NoticeDTO selectNotice(int nno);
+
+	int updateNotice(NoticeDTO dto);
 
 
 }

@@ -17,12 +17,13 @@
 		delete from notice where nno = #{nno}
 	</delete>
 	
-<!--	<select id="selectBoard" resultType="board">
+	<select id="selectNotice" resultType="notice">
 		select * from notice where nno = #{nno}
 	</select>
-	<update id="updateBoarder" parameterType="map">
+	
+	<update id="updateNotice" parameterType="notice">
 		update notice set nname = #{nname}, ncontent=#{ncontent} where nno = #{nno}
-	</update> -->
+	</update>
 
 </mapper>
 

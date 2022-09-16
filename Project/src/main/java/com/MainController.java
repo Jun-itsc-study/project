@@ -366,36 +366,31 @@ public class MainController {
 	@RequestMapping("noticeWrite.do")
 	public String noticeWrite(NoticeDTO dto) {
 		noticeService.insertNotice(dto);
-		return "redirect:noticeList";
+		return "redirect:/noticeList";
 	}
 	
 	//공지사항 삭제
 	@RequestMapping("deleteNotice.do")
 	public String deleteNotice(int nno, HttpSession session) {
 		noticeService.deleteNotice(nno);
-		return "redirect:noticeList";
+		return "redirect:/noticeList";
 	}
 
+	//관리자 수정할 게시판 번호(nno) 불러와서 뿌려주는곳
+	@RequestMapping("updateNotice")
+	public String updateNoticeView(int nno, Model model) {
+		NoticeDTO dto = noticeService.selectNotice(nno);
+		model.addAttribute("dto", dto);
+		return "admin/notice_update";
+	}
 	
-//	//관리자 수정할 게시판 번호(nno) 불러와서 뿌려주는곳
-//	@RequestMapping("updateNotice.do")
-//	public String updateNotice(int nno,Model model) {
-//		System.out.println("수정할 번호 : "+nno);
-//		BoardDTO dto = boardService.selectBoard(nno);
-//		System.out.println(dto);
-//		model.addAttribute("dto", dto);
-//		
-//		return "borderUpdate";
-////		return "/template/UpdateBoarder";
-//	}
-//	//관리자 수정할 데이터를 받은후 수정할 페이지
-//	@RequestMapping("updateBorder.do")
-//	public String updateBorder(int nno,String nname, String ncontent) {
-//		System.out.println("start	");
-//		int result = boardService.updateBoarder(nno, nname, ncontent);
-//		System.out.println(result);
-//		return "redirect:/borderIndex.do";
-//	}
+	//관리자 수정할 데이터를 받은후 수정할 페이지
+	@RequestMapping("updateNotice.do")
+	public String updateBorder(NoticeDTO dto) {
+		noticeService.updateNotice(dto);
+		return "redirect:/noticeList";
+	}
+	
 	//쇼핑-----------------------------------------------------------
 	@RequestMapping("shopList")
 	public String shopList() {

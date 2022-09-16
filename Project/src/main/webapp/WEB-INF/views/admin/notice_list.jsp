@@ -75,7 +75,7 @@
 										</div>
 										<div class="accordion-body">
 											<input type="hidden" name="nno" value="${obj.nno }">
-											<button type="button" class="btnUpdate btn"><i class="ri-edit-line"></i></button>
+											<button type="button" class="btnUpdate btn" onclick="location.href='updateNotice?nno=${obj.nno}'"><i class="ri-edit-line"></i></button>
 											<button type="button" class="btnDelete btn" onclick="location.href='deleteNotice.do?nno=${obj.nno}'"><i class="ri-delete-bin-2-line"></i></button>
 										</div>
 									</div>

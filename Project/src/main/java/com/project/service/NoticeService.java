@@ -1,8 +1,6 @@
 package com.project.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -29,19 +27,14 @@ public class NoticeService {
 		return mapper.deleteNotice(nno);
 	}
 
-//	public NoticeDTO selectBoard(int nno) {
-//		return mapper.selectBoard(nno);
-//	}
-//
-//	public int updateBoarder(int nno, String nname, String ncontent) {
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("nno", nno);
-//		map.put("nname", nname);
-//		map.put("ncontent", ncontent);
-//		System.out.println("맵 : " + map);
-//		return mapper.updateBoarder(map);
-//		
-//	}
+	public NoticeDTO selectNotice(int nno) {
+		return mapper.selectNotice(nno);
+	}
+
+	public int updateNotice(NoticeDTO dto) {
+		return mapper.updateNotice(dto);
+		
+	}
 	
 }
 
