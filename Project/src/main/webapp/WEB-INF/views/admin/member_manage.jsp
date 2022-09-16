@@ -79,7 +79,6 @@
 		});
 	}//add event delete
 	$(function(){
-		//$(".regiMember").hide();
 		//add_event_add();
 		add_event_update();
 		add_event_delete();
@@ -113,7 +112,6 @@
 						tag += '</tr>';
 					}
 					$(".search_result").html(tag);
-					//add_event_add();
 					add_event_update();
 					add_event_delete();
 				}
@@ -127,6 +125,10 @@
 	  		}
     	}); //전화번호 자동 - 추가
 		//②
+		$(".btn_show").click(function(){
+			window.open('adminAddMember', 'window', 'width=650, height=800, left='+(window.screen.width / 2 - 200)+', top='+(window.screen.height / 2 - 200));
+		})//btn_show */
+		
 		
 		$(".findA").click(function(){
 			var d = $(this).parent().parent();
@@ -182,6 +184,11 @@
 					</div>
 				</div>
 				<!-- ③ -->
+				<div class="col-lg-5" style="position: relative;">
+					<div class="search-bar" style="position: absolute; bottom: 10px;">
+						<button class="btn_show btn btn-secondary">회원 등록</button>
+					</div>
+				</div>
 				<!-- 회원목록 Div -->
 				<div class="col-lg-12">
 					<div class="card">
@@ -236,9 +243,9 @@
 				<!-- End 회원목록 Div -->
 			</div>
 		</section>
+		<!-- 회원등록 Div -->
 	</main>
 	<!-- End #main -->
-
 	<!-- Footer -->
 	<jsp:include page="/template/admin/footer.jsp"></jsp:include>
 	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -294,6 +301,7 @@
 						<button class="btn_show btn btn-secondary">회원 등록</button>
 					</div>
 				</div>
+				
 				-->
 				<!-- End Search Bar -->
 				<!-- 회원등록 Div -->

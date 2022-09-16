@@ -103,34 +103,41 @@ public class MainController {
 			@RequestParam(value = "birth", defaultValue = "1") String birth, String tel, 
 			@RequestParam(value="recommender", defaultValue="1") String recommender, HttpServletResponse res)
 			throws IOException {
+		int regi = 500; //회원가입
+		int rer = 1000; //추천한사람
+		int red = 500; //추천받은사람
+		
 		int result = memberService.register(id, pwd, name, Date.valueOf(birth), tel, postno, address1, address2);
 		if(result == 1) {
 			MemberDTO dto = new MemberDTO();
 			dto.setMno(memberService.selectMember(id).getMno());
 			memberService.registerMemberDetail(dto.getMno(), recommender);
-			dto.setMileage(500);
+			dto.setMileage(regi);
+			dto.setTotalmileage(regi);
 			adminMemberService.updateMileage(dto);
-			adminMemberService.updateMileageLog(dto.getMno(), 500, "회원가입 마일리지 500");
+			adminMemberService.updateMileageLog(dto.getMno(), regi, "회원가입 마일리지 500");
 			
 			if(!recommender.equals("1")) {
 				//신규가입회원 추천인 마일리지 등록
-				dto.setMileage(dto.getMileage()+1000);
+				dto.setMileage(dto.getMileage()+rer);
+				dto.setTotalmileage(dto.getTotalmileage()+rer);
 				adminMemberService.updateMileage(dto);
-				adminMemberService.updateMileageLog(dto.getMno(), 1000, "추천인 등록 마일리지 1000");
+				adminMemberService.updateMileageLog(dto.getMno(), rer, "추천인 등록 마일리지 1000");
 				
 				//추천대상자 마일리지 등록
-				dto.setMno(memberService.selectMember(recommender).getMno());
-				dto.setMileage(dto.getMileage()+500);
-				adminMemberService.updateMileage(dto);
-				adminMemberService.updateMileageLog(dto.getMno(), 500, "추천인 등록 마일리지 500");
-				dto.setVno(memberService.selectVno(dto.getMno()));
-				if(dto.getVno() < 2) {
+				MemberDTO dto2 = memberService.selectMember(recommender);
+				dto2.setMileage(dto2.getMileage()+red);
+				dto2.setTotalmileage(dto2.getTotalmileage()+red);
+				adminMemberService.updateMileage(dto2);
+				adminMemberService.updateMileageLog(dto2.getMno(), red, "추천인 등록 마일리지 500");
+				dto.setVno(memberService.selectVno(dto2.getMno()));
+				if(dto2.getVno() < 2) {
 					//다음 등급 기준 받아오기
-					int vcondition = adminMemberService.selectVcondition(dto.getVno()+1);
+					int vcondition = adminMemberService.selectVcondition(dto2.getVno()+1);
 					//현재 누적마일리지와 비교
-					if(dto.getTotalmileage() >= vcondition) {
+					if(dto2.getTotalmileage() >= vcondition) {
 						//이상이면 등급 변경
-						adminMemberService.updateVip(dto.getMno(),dto.getVno()+1);
+						adminMemberService.updateVip(dto2.getMno(),dto2.getVno()+1);
 					}
 				}
 			}
@@ -241,6 +248,11 @@ public class MainController {
 		model.addAttribute("list", list);
 		model.addAttribute("type","memberManage");
 		return "admin/member_manage";
+	}
+	//회원추가페이지 오픈
+	@RequestMapping("adminAddMember")
+	public String adminAddMember() {
+		return "admin/admin_add_member";
 	}
 	//회원삭제
 	@RequestMapping("memberDelete.do")

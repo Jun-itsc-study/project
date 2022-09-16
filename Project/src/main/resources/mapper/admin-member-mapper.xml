@@ -49,7 +49,7 @@
 	</insert>
 	 -->
 	 
-	<delete id="deleteMember" parameterType="String">
+	<delete id="deleteMember" parameterType="int">
 		delete from member where mno = #{mno}
 	</delete>
 	
