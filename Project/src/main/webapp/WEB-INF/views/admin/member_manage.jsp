@@ -103,7 +103,7 @@
 						tag += '<td><input type="text" class="form-control" name="tel" value="'+r[i].member.tel+'"></td>';
 						tag += '<td><input type="text" class="form-control" name="postno" value="'+r[i].member.postno+'"></td>';
 						tag += '<td><input type="text" class="form-control" name="address1" value="'+r[i].member.address1+'"></td>';
-						tag += '<td><input type="text" class="form-control" name="address2" value="'+r[i].member.address2+'"></td>';
+						tag += '<td><input type="text" class="form-control" name="address2" value="'+r[i].member.address2+'"><button class="btn findA"><i class="bi bi-search"></i></button></td>';
 						tag += '<td><input type="text" class="form-control" name="vno" value="'+r[i].member.vno+'"></td>';
 						tag += '<td><input type="text" class="form-control" name="vname" value="'+r[i].vip.vname+'"></td>';
 						tag += '<td><input type="text" class="form-control" name="mileage" value="'+r[i].member.mileage+'"></td>';
@@ -129,11 +129,13 @@
 		//②
 		
 		$(".findA").click(function(){
-			var d = $(this).parent();
+			var d = $(this).parent().parent();
     		new daum.Postcode({
     	        oncomplete: function(data) {
+					console.log(d.parent().parent().find("input[name=postno]").val());
     	        	d.find("input[name=postno]").val(data.zonecode);
     	        	d.find("input[name=address1]").val(data.address);
+    	        	d.find("input[name=address2]").val("");
     	        	d.find("input[name=address2]").focus();
     	        }
     	    }).open();
