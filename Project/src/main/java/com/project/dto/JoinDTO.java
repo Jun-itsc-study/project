@@ -8,7 +8,12 @@ public class JoinDTO {
 	private MemberDTO member;
 	private MemberVipDTO vip;
 	private QnaDTO qna;
-	
+	private NoticeDTO notice;
+	private ProductDTO product;
+	private ProductDetailDTO productDetail;
+	private ProductFileDTO productFile;
+	private CategoryTopDTO categoryTop;
+	private CategoryBotDTO categoryBot;
 	public JoinDTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -36,6 +41,42 @@ public class JoinDTO {
 	}
 	public void setQna(QnaDTO qna) {
 		this.qna = qna;
+	}
+	public NoticeDTO getNotice() {
+		return notice;
+	}
+	public void setNotice(NoticeDTO notice) {
+		this.notice = notice;
+	}
+	public ProductDTO getProduct() {
+		return product;
+	}
+	public void setProduct(ProductDTO product) {
+		this.product = product;
+	}
+	public ProductDetailDTO getProductDetail() {
+		return productDetail;
+	}
+	public void setProductDetail(ProductDetailDTO productDetail) {
+		this.productDetail = productDetail;
+	}
+	public ProductFileDTO getProductFile() {
+		return productFile;
+	}
+	public void setProductFile(ProductFileDTO productFile) {
+		this.productFile = productFile;
+	}
+	public CategoryTopDTO getCategoryTop() {
+		return categoryTop;
+	}
+	public void setCategoryTop(CategoryTopDTO categoryTop) {
+		this.categoryTop = categoryTop;
+	}
+	public CategoryBotDTO getCategoryBot() {
+		return categoryBot;
+	}
+	public void setCategoryBot(CategoryBotDTO categoryBot) {
+		this.categoryBot = categoryBot;
 	}
 	
 	

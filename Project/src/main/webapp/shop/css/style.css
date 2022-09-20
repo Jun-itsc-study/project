@@ -1812,9 +1812,10 @@ ol {
 	left: 0;
 	top: 12px;
 	height: 1px;
-	width: 370px;
+	width: 250px;
 	background: #ebebeb;
 	content: "";
+	
 }
 
 .product__details__tab .nav-tabs:after {
@@ -1822,7 +1823,7 @@ ol {
 	right: 0;
 	top: 12px;
 	height: 1px;
-	width: 370px;
+	width: 250px;
 	background: #ebebeb;
 	content: "";
 }

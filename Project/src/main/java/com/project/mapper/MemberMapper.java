@@ -1,10 +1,12 @@
 package com.project.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.project.dto.MemberDTO;
+import com.project.dto.MemberVipDTO;
 
 @Mapper
 public interface MemberMapper {
@@ -34,5 +36,7 @@ public interface MemberMapper {
 	public int selectVno(int mno);
 
 	public int checkId(String id);
+
+	public List<MemberVipDTO> selectVipAll();
 
 }

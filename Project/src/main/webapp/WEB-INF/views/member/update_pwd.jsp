@@ -111,38 +111,13 @@
 <jsp:include page="/template/shop/bar.jsp"></jsp:include>
 <jsp:include page="/template/shop/preloader.jsp"></jsp:include>
 
-    <section class="breadcrumb-section set-bg" data-setbg="shop/img/breadcrumb.jpg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="breadcrumb__text">
-                        <h2><a href="memberInfo" style="color:white;">My Page</a></h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+    <jsp:include page="/template/member/submenu.jsp"></jsp:include>
 
     <!-- Checkout Section Begin -->
     <section class="blog-details spad">
         <div class="container">
         	<div class="row">
-        		<div class="col-lg-4 col-md-5 order-md-1 order-2" style="max-width:25%;">
-                    <div class="blog__sidebar">
-                        <div class="blog__sidebar__item">
-                            <h4>My Info</h4>
-                            <ul>
-                            	<li><a href="#">장바구니</a></li>
-                                <li><a href="#">주문목록/배송조회</a></li>
-                                <li><a href="updateMember">개인정보 확인/수정</a></li>
-                                <li style="background-color:rgb(222,222,222);"><a href="updatePwd" style="font-weight:bold;">비밀번호 변경</a></li>
-                                <li><a href="#">등급 혜택</a></li>
-                                <li><a href="#">문의 내역</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+				<jsp:include page="/template/member/sidebar.jsp"></jsp:include>
         	<div class="col-lg-8 col-md-7 order-md-1 order-1">
                     <div class="checkout__form">
                 <h4>비밀번호 변경</h4>

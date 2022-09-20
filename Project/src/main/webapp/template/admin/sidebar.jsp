@@ -23,8 +23,6 @@
 			
 			$(".dashboard").addClass("collapsed");
 		}
-		
-		//$(this).closest("ul").parent().children(".nav-link").removeClass("collapsed");
 	});
 
 </script>

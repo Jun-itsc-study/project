@@ -29,46 +29,19 @@
 	<jsp:include page="/template/shop/header.jsp"></jsp:include>
 	<jsp:include page="/template/shop/bar.jsp"></jsp:include>
 	<jsp:include page="/template/shop/preloader.jsp"></jsp:include>
-	
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-section set-bg" data-setbg="shop/img/breadcrumb.jpg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="breadcrumb__text">
-                        <h2><a href="memberInfo" style="color:white;">My Page</a></h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+	<jsp:include page="/template/member/submenu.jsp"></jsp:include>
     
     <!-- Blog Details Section Begin -->
     <section class="blog-details spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 col-md-5">
-                    <div class="blog__sidebar">
-                        <div class="blog__sidebar__item">
-                            <h4>My Info</h4>
-                            <ul>
-                            	<li><a href="#">장바구니</a></li>
-                                <li><a href="#">주문목록/배송조회</a></li>
-                                <li><a href="updateMember">개인정보 확인/수정</a></li>
-                                <li><a href="updatePwd">비밀번호 변경</a></li>
-                                <li><a href="#">등급 혜택</a></li>
-                                <li><a href="#">문의 내역</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <jsp:include page="/template/member/sidebar.jsp"></jsp:include>
                 
-                <div class="row" style="width:60%;">
-					<div class="col-lg-12 col-md-12 col-sm-12" style="height:">
+                <div class="col-lg-8 col-md-7 order-md-1 order-1" style="width:60%;float:none;">
+					<div class="col-lg-12 col-md-12 col-sm-12">
 						<div class="blog__item">
 							<div class="blog__item__text">
-								<h5><a href="#">${year }년도 등급 [${vip}]</a></h5>
+								<h5><a href="vipInfo"><script>document.write(new Date().getFullYear());</script>년도 등급 [${vip}]</a></h5>
 								<p>혜택</p>
 								<p>짜자잔</p>
 							</div>

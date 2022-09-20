@@ -2,11 +2,13 @@ package com.project.service;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.project.dto.MemberDTO;
+import com.project.dto.MemberVipDTO;
 import com.project.mapper.MemberMapper;
 
 @Service
@@ -104,6 +106,10 @@ public class MemberService {
 
 	public int checkId(String id) {
 		return mapper.checkId(id);
+	}
+
+	public List<MemberVipDTO> selectVipAll() {
+		return mapper.selectVipAll();
 	}
 
 

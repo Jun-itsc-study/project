@@ -122,4 +122,9 @@
 	<update id="updatePchange" parameterType="int">
 		update member_detail set pchange = sysdate where mno = #{mno}
 	</update>
+	
+	<!-- 등급정보 전체 -->
+	<select id="selectVipAll" resultType="vip">
+		select * from vip
+	</select>
 </mapper>

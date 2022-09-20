@@ -2,6 +2,7 @@ package com;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -15,14 +16,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.dto.CategoryBotDTO;
+import com.project.dto.CategoryTopDTO;
 import com.project.dto.JoinDTO;
 import com.project.dto.MemberDTO;
 import com.project.dto.MemberVipDTO;
 import com.project.dto.NoticeDTO;
+import com.project.dto.ProductDTO;
 import com.project.dto.QnaDTO;
 import com.project.service.AdminMemberService;
 import com.project.service.MemberService;
 import com.project.service.NoticeService;
+import com.project.service.ProductService;
 import com.project.service.QnaService;
 
 @Controller
@@ -31,19 +36,34 @@ public class MainController {
 	private AdminMemberService adminMemberService;
 	private QnaService qnaService;
 	private NoticeService noticeService;
+	private ProductService productService;
 	
-	public MainController(MemberService memberService, AdminMemberService adminMemberService, QnaService qnaService, NoticeService noticeService) {
+	public MainController(MemberService memberService, AdminMemberService adminMemberService, QnaService qnaService, NoticeService noticeService, ProductService productService) {
 		super();
 		this.memberService = memberService;
 		this.adminMemberService = adminMemberService;
 		this.qnaService = qnaService;
 		this.noticeService = noticeService;
+		this.productService = productService;
 		
 	}
 
 	// 메인페이지
 	@RequestMapping("/")
-	public String main(Model model) {
+	public String main(Model model, 
+			@RequestParam(value = "ctno", defaultValue = "-1")int ctno,
+			@RequestParam(value = "cbno", defaultValue = "-1")int cbno) {
+		List<JoinDTO> proList;
+		
+		if(ctno == -1 && cbno == -1) proList = productService.selectAllProduct();
+		else if(ctno != -1) proList = productService.selectCaProduct("ctno",ctno);
+		else  proList = productService.selectCaProduct("cbno",cbno);
+		
+		model.addAttribute("proList",proList);
+		List<CategoryTopDTO> cateTop = productService.selectAllCategoryTop();
+		model.addAttribute("cateTop",cateTop);
+		List<CategoryBotDTO> cateBot = productService.selectAllCategoryBot();
+		model.addAttribute("cateBot",cateBot);
 		model.addAttribute("index", "index");
 		return "index";
 	}
@@ -179,10 +199,9 @@ public class MainController {
 	@RequestMapping("memberInfo")
 	public String memberInfo(Model model, HttpSession session) {
 		//마이페이지 들어갈 때
-		int year = Calendar.getInstance().get(Calendar.YEAR);
-		model.addAttribute("year",year);
 		MemberDTO dto = (MemberDTO)session.getAttribute("loginDTO");
 		if(dto == null) {return "redirect:/";}
+		
 		//장바구니 정보
 		//select c.cno, c.ea, p.pno, p.pname from cart c, product p where c.pno = p.pno and mno = #{mno}
 		//model.addAttribute("cartList",cartList);
@@ -194,9 +213,11 @@ public class MainController {
 		//등급정보 - 현재등급 - 다음 등급까지 얼마나 남았는지
 		String vip = memberService.getVip(dto.getVno());
 		model.addAttribute("vip",vip);
+		
 		//문의내역 정보
 		//select * from qna where mno = #{mno}
 		//model.addAttribute("qnaList",qnaList);
+		
 		return "member/member_info";
 	}
 
@@ -205,6 +226,7 @@ public class MainController {
 	public String updateMemberView(HttpSession session, Model model) {
 		MemberDTO dto = memberService.selectMember((String) session.getAttribute("id"));
 		model.addAttribute("dto", dto);
+		model.addAttribute("type","updateMember");
 		return "member/update_member";
 	}
 
@@ -218,7 +240,8 @@ public class MainController {
 
 	// 비밀번호 수정 페이지
 	@RequestMapping("updatePwd")
-	public String updatePwdView() {
+	public String updatePwdView(Model model) {
+		model.addAttribute("type","updatePwd");
 		return "member/update_pwd";
 	}
 
@@ -233,6 +256,18 @@ public class MainController {
 			//업데이트 실패 시 로그
 		}
 		res.getWriter().write(String.valueOf(result));
+	}
+	
+	//등급혜택 페이지
+	@RequestMapping("vipInfo")
+	public String vipInfoView(Model model, HttpSession session) {
+		MemberDTO dto = memberService.selectMember((String)session.getAttribute("id"));
+		List<MemberVipDTO> vip = memberService.selectVipAll();
+		model.addAttribute("vno", dto.getVno());
+		model.addAttribute("total", dto.getTotalmileage());
+		model.addAttribute("vip", vip);
+		model.addAttribute("type","vipInfo");
+		return "member/vip_info";
 	}
 	
 	//관리자-----------------------------------------------------------
@@ -403,8 +438,22 @@ public class MainController {
 	}
 	
 	//쇼핑-----------------------------------------------------------
-	@RequestMapping("shopList")
-	public String shopList() {
-		return "shop/shop_list";
+	@RequestMapping("productList")
+	public String product_ListView(Model model,
+			@RequestParam(value = "ctno", defaultValue = "-1") int ctno,
+			@RequestParam(value = "cbno", defaultValue = "-1") int cbno) {
+		//서비스 제품 목록을 받아옴
+		List<JoinDTO> list;
+		if(ctno == -1 && cbno == -1) list = productService.selectAllProduct();
+		else if(ctno != -1) list = productService.selectCaProduct("ctno",ctno);
+		else  list = productService.selectCaProduct("cbno",cbno);
+			
+			
+		List<CategoryTopDTO> cateTop = productService.selectAllCategoryTop();
+		List<CategoryBotDTO> cateBot = productService.selectAllCategoryBot();
+		model.addAttribute("cateTop",cateTop);
+		model.addAttribute("cateBot",cateBot);
+		model.addAttribute("list", list);
+		return "shop/product_list";
 	}
 }

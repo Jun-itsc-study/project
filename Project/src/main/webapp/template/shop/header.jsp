@@ -94,13 +94,14 @@
 				<nav class="header__menu">
 					<ul>
 						<li><a href="/">Home</a></li>
-						<li class="active"><a href="shopList">Shop</a></li>
+						<li class="active"><a href="productList">Shop</a></li>
 						<li><a href="#">Category</a>
 							<ul class="header__menu__dropdown">
-								<li><a href="#">Computer</a></li>
-								<li><a href="#">Smart Phone</a></li>
-								<li><a href="#">Game Device</a></li>
-							</ul></li>
+								<c:forEach var="ca" items="${cateTop }">
+									<li><a href="productList?ctno=${ca.ctno }">${ca.ctname }</a></li>
+								</c:forEach>
+							</ul>
+						</li>
 						<li><a href="#">Service</a></li>
 						<li><a href="#">Contact</a></li>
 					</ul>
@@ -110,10 +111,8 @@
 			<div class="col-lg-3">
 				<div class="header__cart">
 					<ul>
-						<!--<li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>-->
 						<li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
 					</ul>
-					<!-- <div class="header__cart__price">item: <span>$150.00</span></div> -->
 				</div>
 			</div>
 			</c:if>
