@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -23,12 +24,16 @@ import com.project.dto.MemberDTO;
 import com.project.dto.MemberVipDTO;
 import com.project.dto.NoticeDTO;
 import com.project.dto.ProductDTO;
+import com.project.dto.ProductFileDTO;
 import com.project.dto.QnaDTO;
 import com.project.service.AdminMemberService;
+import com.project.service.CartService;
 import com.project.service.MemberService;
 import com.project.service.NoticeService;
+import com.project.service.OrderedService;
 import com.project.service.ProductService;
 import com.project.service.QnaService;
+import com.project.vo.PagingVO;
 
 @Controller
 public class MainController {
@@ -37,17 +42,29 @@ public class MainController {
 	private QnaService qnaService;
 	private NoticeService noticeService;
 	private ProductService productService;
-	
-	public MainController(MemberService memberService, AdminMemberService adminMemberService, QnaService qnaService, NoticeService noticeService, ProductService productService) {
+	private CartService cartService;
+	private OrderedService orderedService;
+	public MainController(MemberService memberService, AdminMemberService adminMemberService, 
+			QnaService qnaService, NoticeService noticeService, ProductService productService,
+			CartService cartService, OrderedService orderedService
+			) {
 		super();
 		this.memberService = memberService;
 		this.adminMemberService = adminMemberService;
 		this.qnaService = qnaService;
 		this.noticeService = noticeService;
 		this.productService = productService;
+		this.cartService = cartService;
+		this.orderedService = orderedService;
 		
 	}
-
+	public void setCategory(Model model) {
+		List<CategoryTopDTO> cateTop = productService.selectAllCategoryTop();
+		List<CategoryBotDTO> cateBot = productService.selectAllCategoryBot();
+		model.addAttribute("cateTop",cateTop);
+		model.addAttribute("cateBot",cateBot);
+	}
+	
 	// 메인페이지
 	@RequestMapping("/")
 	public String main(Model model, 
@@ -55,15 +72,12 @@ public class MainController {
 			@RequestParam(value = "cbno", defaultValue = "-1")int cbno) {
 		List<JoinDTO> proList;
 		
-		if(ctno == -1 && cbno == -1) proList = productService.selectAllProduct();
-		else if(ctno != -1) proList = productService.selectCaProduct("ctno",ctno);
-		else  proList = productService.selectCaProduct("cbno",cbno);
+		if(ctno == -1 && cbno == -1) proList = productService.selectAllProduct(1);
+		else if(ctno != -1) proList = productService.selectCaProduct("ctno",ctno, 1);
+		else  proList = productService.selectCaProduct("cbno",cbno, 1);
 		
 		model.addAttribute("proList",proList);
-		List<CategoryTopDTO> cateTop = productService.selectAllCategoryTop();
-		model.addAttribute("cateTop",cateTop);
-		List<CategoryBotDTO> cateBot = productService.selectAllCategoryBot();
-		model.addAttribute("cateBot",cateBot);
+		setCategory(model);
 		model.addAttribute("index", "index");
 		return "index";
 	}
@@ -71,7 +85,8 @@ public class MainController {
 	//기본-----------------------------------------------------------
 	// 로그인페이지
 	@RequestMapping("login")
-	public String loginView() {
+	public String loginView(Model model) {
+		setCategory(model);
 		return "account/login";
 	}
 
@@ -79,12 +94,14 @@ public class MainController {
 	@RequestMapping("login.do")
 	public String login(String id, String pwd, HttpSession session) {
 		MemberDTO dto = memberService.login(id, pwd);
+		System.out.println(id+","+pwd);
 		if (dto != null) {
 			session.setAttribute("login", true);
 			session.setAttribute("loginDTO",dto);
 			session.setAttribute("id", id);
 			session.setAttribute("mno", dto.getMno());
 			int result = memberService.updateLastLogin(dto.getMno());
+			System.out.println(result);
 			//업데이트 실패 시 로그파일 작성?
 			return "redirect:/";
 		} else {
@@ -106,7 +123,8 @@ public class MainController {
 
 	// 회원가입 페이지
 	@RequestMapping("register")
-	public String registerView() {
+	public String registerView(Model model) {
+		setCategory(model);
 		return "account/register";
 	}
 	
@@ -126,7 +144,6 @@ public class MainController {
 		int regi = 500; //회원가입
 		int rer = 1000; //추천한사람
 		int red = 500; //추천받은사람
-		
 		int result = memberService.register(id, pwd, name, Date.valueOf(birth), tel, postno, address1, address2);
 		if(result == 1) {
 			MemberDTO dto = new MemberDTO();
@@ -200,6 +217,7 @@ public class MainController {
 	public String memberInfo(Model model, HttpSession session) {
 		//마이페이지 들어갈 때
 		MemberDTO dto = (MemberDTO)session.getAttribute("loginDTO");
+		setCategory(model);
 		if(dto == null) {return "redirect:/";}
 		
 		//장바구니 정보
@@ -215,8 +233,8 @@ public class MainController {
 		model.addAttribute("vip",vip);
 		
 		//문의내역 정보
-		//select * from qna where mno = #{mno}
-		//model.addAttribute("qnaList",qnaList);
+		List<QnaDTO> qnaList = qnaService.selectMemberQna(dto.getMno());
+		model.addAttribute("qnaList",qnaList);
 		
 		return "member/member_info";
 	}
@@ -227,6 +245,7 @@ public class MainController {
 		MemberDTO dto = memberService.selectMember((String) session.getAttribute("id"));
 		model.addAttribute("dto", dto);
 		model.addAttribute("type","updateMember");
+		setCategory(model);
 		return "member/update_member";
 	}
 
@@ -242,6 +261,7 @@ public class MainController {
 	@RequestMapping("updatePwd")
 	public String updatePwdView(Model model) {
 		model.addAttribute("type","updatePwd");
+		setCategory(model);
 		return "member/update_pwd";
 	}
 
@@ -267,6 +287,7 @@ public class MainController {
 		model.addAttribute("total", dto.getTotalmileage());
 		model.addAttribute("vip", vip);
 		model.addAttribute("type","vipInfo");
+		setCategory(model);
 		return "member/vip_info";
 	}
 	
@@ -441,19 +462,58 @@ public class MainController {
 	@RequestMapping("productList")
 	public String product_ListView(Model model,
 			@RequestParam(value = "ctno", defaultValue = "-1") int ctno,
-			@RequestParam(value = "cbno", defaultValue = "-1") int cbno) {
+			@RequestParam(value = "cbno", defaultValue = "-1") int cbno,
+			@RequestParam(value = "type", defaultValue = "0") int type,
+			@RequestParam(name = "pageNo", defaultValue = "1") int pageNo
+			) {
 		//서비스 제품 목록을 받아옴
 		List<JoinDTO> list;
-		if(ctno == -1 && cbno == -1) list = productService.selectAllProduct();
-		else if(ctno != -1) list = productService.selectCaProduct("ctno",ctno);
-		else  list = productService.selectCaProduct("cbno",cbno);
-			
-			
-		List<CategoryTopDTO> cateTop = productService.selectAllCategoryTop();
-		List<CategoryBotDTO> cateBot = productService.selectAllCategoryBot();
-		model.addAttribute("cateTop",cateTop);
-		model.addAttribute("cateBot",cateBot);
+		if(ctno == -1 && cbno == -1) list = productService.selectAllProduct(type);
+		else if(ctno != -1) list = productService.selectCaProduct("ctno",ctno, type);
+		else  list = productService.selectCaProduct("cbno",cbno, type);
+		
+		setCategory(model);
 		model.addAttribute("list", list);
+		
+		model.addAttribute("ctno", ctno);
+		model.addAttribute("cbno", cbno);
+		model.addAttribute("type", type);
+		
+		
+		// 페이징 처리
+		int count = productService.selectProductCount();
+		PagingVO vo = new PagingVO(count, pageNo, 9, 5);
+		model.addAttribute("paging", vo);
 		return "shop/product_list";
+	}
+	
+	
+//	dto에 상품정보를 담아서 상품 상세페이지로 이동하기 
+	@RequestMapping("productDetail")
+	public String productView(int pno, Model model, HttpSession session) {
+		JoinDTO dto = productService.selectProduct(pno);
+		model.addAttribute("dto", dto);
+		//List<ProductFileDTO> path =  productService.getPath(pno);
+		setCategory(model);
+		return "shop/product_details";
+	}
+	
+	//장바구니 페이지로 이동하고 장바구니 테이블에 값 저장
+	@RequestMapping("insertCart")
+	public void insertCart(int pno,int ea,HttpSession session, HttpServletResponse res) throws IOException {
+		int mno = (int)session.getAttribute("mno");
+		int result = cartService.insertCart(mno, pno, ea);
+		//model.addAttribute("ea",ea);
+		
+		res.getWriter().write(String.valueOf(result));
+		//return "shoping_cart";
+	}
+	
+	@RequestMapping("cart")
+	public String cart(Model model) {
+		//JoinDTO dto = productService.selectProduct(pno);
+		//model.addAttribute("dto",dto);
+		setCategory(model);
+		return "shop/cart";
 	}
 }

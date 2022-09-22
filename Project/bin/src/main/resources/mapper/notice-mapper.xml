@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.NoticeMapper">
+	
+	
+	<select id="selectNoticeList" resultType="notice">
+		select * from notice order by nno desc
+	</select>
+	
+	<insert id="insertNotice" parameterType="notice">
+		insert into notice(nno, nname, ncontent) values(seq_nno.nextval, #{nname},#{ncontent})
+	</insert>
+	
+ 	<delete id="deleteNotice" parameterType="int">
+		delete from notice where nno = #{nno}
+	</delete>
+	
+	<select id="selectNotice" resultType="notice">
+		select * from notice where nno = #{nno}
+	</select>
+	
+	<update id="updateNotice" parameterType="notice">
+		update notice set nname = #{nname}, ncontent=#{ncontent} where nno = #{nno}
+	</update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

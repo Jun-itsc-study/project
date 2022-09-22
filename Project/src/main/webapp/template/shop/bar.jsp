@@ -58,7 +58,7 @@
 							OOOO 탑재 <br />OO원~ 
 						</h2>
 						<p>Free Pickup and Delivery Available</p>
-						<a href="#" class="primary-btn">지금 보러가기</a>
+						<a href="productList" class="primary-btn">지금 보러가기</a>
 					</div>
 				</div>
 

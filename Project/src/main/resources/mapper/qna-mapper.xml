@@ -56,5 +56,7 @@
 	<update id="adminDeleteQna" parameterType="qna">
 		update qna set qtitle = #{qtitle}, qcontent = #{qcontent}, qstatus = 3, qanswer=NULL, qadate=NULL where qno = #{qno}
 	</update>
-	
+	<select id="selectMemberQna" parameterType="int" resultType="qna">
+		select * from qna where mno = #{mno}
+	</select>
 </mapper>

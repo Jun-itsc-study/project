@@ -12,9 +12,10 @@ import com.project.dto.JoinDTO;
 @Mapper
 public interface ProductMapper {
 
-	JoinDTO selectProductDTO(int pno);
-	List<JoinDTO> selectAllProduct();
+	JoinDTO selectProduct(int pno);
+	List<JoinDTO> selectAllProduct(int type);
 	List<CategoryTopDTO> selectAllCategoryTop();
 	List<CategoryBotDTO> selectAllCategoryBot();
 	List<JoinDTO> selectCaProduct(Map<String, Object> map);
+	int selectProductCount();
 }

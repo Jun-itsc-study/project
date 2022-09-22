@@ -19,12 +19,12 @@ public class ProductService {
 		this.mapper = mapper;
 	}
 
-	public JoinDTO selectProductDTO(int pno) {
-		return mapper.selectProductDTO(pno);
+	public JoinDTO selectProduct(int pno) {
+		return mapper.selectProduct(pno);
 	}
 	
-	public List<JoinDTO> selectAllProduct() {
-		return mapper.selectAllProduct();
+	public List<JoinDTO> selectAllProduct(int type) {
+		return mapper.selectAllProduct(type);
 	}
 
 	public List<CategoryTopDTO> selectAllCategoryTop() {
@@ -35,11 +35,16 @@ public class ProductService {
 		return mapper.selectAllCategoryBot();
 	}
 
-	public List<JoinDTO> selectCaProduct(String cate, int gory) {
+	public List<JoinDTO> selectCaProduct(String cate, int gory, int type) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cate", cate);
 		map.put("gory", gory);
+		map.put("type", type);
 		return mapper.selectCaProduct(map);
+	}
+
+	public int selectProductCount() {
+		return mapper.selectProductCount();
 	}
 	
 }

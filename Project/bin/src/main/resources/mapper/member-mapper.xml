@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.MemberMapper">
+	<resultMap type="vip" id="memberVipDTO">
+		<id property="vno" column="vno"/>
+		<result property="vname" column="vname"/>
+		<result property="vcondition" column="vcondition"/>
+		<result property="vpercent" column="vpercent"/>
+	</resultMap>
+	<resultMap type="member" id="memberDTO">
+		<id property="mno" column="mno"/>
+		<result property="id" column="id"/>
+		<result property="pwd" column="pwd"/>
+		<result property="name" column="name"/>
+		<result property="birth" column="birth"/>
+		<result property="tel" column="tel"/>
+		<result property="postno" column="postno"/>
+		<result property="address1" column="address1"/>
+		<result property="address2" column="address2"/>
+		<result property="vno" column="vno"/>
+		<result property="mileage" column="mileage"/>
+		<result property="totalmileage" column="totalmileage"/>
+	</resultMap>
+	<resultMap type="memberDetail" id="memberDetailDTO">
+		<result property="mno" column="mno"/>
+		<result property="pchange" column="pchange"/>
+		<result property="lastLogin" column="lastlogin"/>
+		<result property="dormant" column="dormant"/>
+		<result property="recommender" column="recommender"/>
+	</resultMap>
+
+	<!-- 로그인 -->
+	<select id="login" parameterType="map" resultType="member">
+		select * from member where id = #{id} and pwd = #{pwd}
+	</select>
+	
+	<update id="updateLastLogin" parameterType="int">
+		update member_detail set lastlogin = sysdate where mno = #{mno}
+	</update>
+	
+	<!-- 회원가입 시 아이디 중복체크 -->
+	<select id="checkId" parameterType="String" resultType="int">
+		select count(*) from member where id = #{id}
+	</select>
+	<!-- 회원가입 시 MNO 받아오기 -->
+	<select id="getMno" parameterType="String" resultType="int">
+		select mno from member where id=#{id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="register" parameterType="map">
+		insert into member 
+		<choose>
+			<when test="birth.equals('1')">
+				(mno, id, pwd, name, tel, postno, address1, address2)
+				values(seq_mno.nextval, #{id},#{pwd},#{name},#{tel},#{postno},#{address1},#{address2})
+			</when>
+			<otherwise>
+				(mno, id, pwd, name, birth, tel, postno, address1, address2)
+				values(seq_mno.nextval, #{id},#{pwd},#{name},to_date(#{birth},'RRRR-MM-DD'),#{tel},#{postno},#{address1},#{address2})
+			</otherwise>
+		</choose>
+	</insert>
+
+	<!-- 회원가입 시 member_detail 추가 -->
+	<insert id="registerMemberDetail" parameterType="memberDetail">
+		insert into member_detail
+			<choose>
+				<when test="recommender.equals('1')">
+					(mno) values(#{mno})				
+				</when>
+				<otherwise>
+					(mno, recommender) values(#{mno}, #{recommender})
+				</otherwise>
+			</choose>
+	</insert>
+	
+	<select id="selectVno" parameterType="int" resultType="int">
+		select vno from member where mno = #{mno}
+	</select>
+	
+	
+	<!-- member, vip table join -->
+	<!-- <resultMap type="join" id="memberVipJoin">
+		<collection property="member" resultMap="memberDTO"/>
+		<collection property="vip" resultMap="memberVipDTO"/>
+	</resultMap> -->
+	
+	<!-- 회원 개인의 정보 select -->
+	<select id="selectMember" parameterType="String" resultType="member">
+		select * from member where id = #{id}
+	</select>
+	<!-- 회원정보 수정 -->
+	<update id="updateMember" parameterType="map">
+		update member set tel = #{tel}, birth=to_date(#{birth}, 'RRRR-MM-DD'), postno=#{postno}, address1=#{address1}, address2 = #{address2} where id = #{id}
+	</update>
+	<!-- 비밀번호 변경 -->
+	<update id="updatePwd" parameterType="map">
+		update member set pwd = #{pwd2} where id=#{id} and pwd = #{pwd}
+	</update>
+	
+	<!-- 계정 찾기 -->
+	<select id="findAccount" parameterType="map" resultType="String">
+		select id from member where name=#{name} and tel=#{tel} 
+			<if test="status == 1">
+					and id=#{id} 
+			</if>
+	</select>
+	<!-- 비밀번호찾기-재설정 -->
+	<update id="findChangePwd" parameterType="map">
+		update member set pwd = #{pwd} where id = #{id}
+	</update>
+	
+	<!-- 등급이름 받아오기 -->
+	<select id="getVip" parameterType="int" resultType="String">
+		select vname from vip where vno=#{vno}
+	</select>
+	
+	<!-- 비밀번호 찾기(재설정) 및 마이페이지 수정 시 마지막변경일 최신화 -->
+	<update id="updatePchange" parameterType="int">
+		update member_detail set pchange = sysdate where mno = #{mno}
+	</update>
+	
+	<!-- 등급정보 전체 -->
+	<select id="selectVipAll" resultType="vip">
+		select * from vip
+	</select>
+</mapper>

@@ -14,9 +14,12 @@ public class JoinDTO {
 	private ProductFileDTO productFile;
 	private CategoryTopDTO categoryTop;
 	private CategoryBotDTO categoryBot;
+	private CartDTO cart;
+	private OrderedDTO ordered;
+	private OrderDetailDTO oDetail;
+	
 	public JoinDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public MemberDetailDTO getMemberDetail() {
 		return memberDetail;
@@ -77,6 +80,24 @@ public class JoinDTO {
 	}
 	public void setCategoryBot(CategoryBotDTO categoryBot) {
 		this.categoryBot = categoryBot;
+	}
+	public CartDTO getCart() {
+		return cart;
+	}
+	public void setCart(CartDTO cart) {
+		this.cart = cart;
+	}
+	public OrderedDTO getOrdered() {
+		return ordered;
+	}
+	public void setOrdered(OrderedDTO ordered) {
+		this.ordered = ordered;
+	}
+	public OrderDetailDTO getoDetail() {
+		return oDetail;
+	}
+	public void setoDetail(OrderDetailDTO oDetail) {
+		this.oDetail = oDetail;
 	}
 	
 	

@@ -49,10 +49,20 @@
 	</select>
 	
 	<!-- 제품 전체 출력 -->
-	<select id="selectAllProduct" resultMap="productJoin">
-		select * from product_info order by pno desc 
+	<select id="selectAllProduct" resultMap="productJoin" parameterType="int">
+		select * from product_info order by  
+		<choose>
+			<when test="type==1">
+				price
+			</when>
+			<when test="2">
+				price desc 
+			</when>
+			<otherwise>
+				pno desc
+			</otherwise>
+		</choose>
 	</select>
-	
 	<select id="selectCaProduct" parameterType="map" resultMap="productJoin">
 		select * from product_info where ${cate} = #{gory} order by pno desc
 	</select>
@@ -62,5 +72,8 @@
 	</select>
 	<select id="selectAllCategoryBot" resultType="categoryBot">
 		select * from category_bot
+	</select>
+	<select id="selectProductCount" resultType="int">
+		select count(*) from product
 	</select>
  </mapper>

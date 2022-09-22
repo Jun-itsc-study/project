@@ -47,6 +47,10 @@ public class QnaService {
 	public int adminDeleteQna(QnaDTO qdto) {
 		return mapper.adminDeleteQna(qdto);
 	}
+
+	public List<QnaDTO> selectMemberQna(int mno) {
+		return mapper.selectMemberQna(mno);
+	}
 	
 	
 

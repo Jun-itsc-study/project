@@ -26,7 +26,7 @@
 						<li><a href="#">핸드폰</a></li>
 						<li><a href="#">게임기기</a></li>
 						<hr>
-						<li><a href="#">장바구니</a></li>
+						<li><a href="cart">장바구니</a></li>
 						<li><a href="#">주문내역</a></li>
 					</ul>
 					<c:if test="${login }">
