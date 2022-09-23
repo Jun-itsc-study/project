@@ -1,12 +1,13 @@
 package com;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -24,7 +25,6 @@ import com.project.dto.JoinDTO;
 import com.project.dto.MemberDTO;
 import com.project.dto.MemberVipDTO;
 import com.project.dto.NoticeDTO;
-import com.project.dto.ProductDTO;
 import com.project.dto.ProductFileDTO;
 import com.project.dto.QnaDTO;
 import com.project.service.AdminMemberService;
@@ -82,7 +82,30 @@ public class MainController {
 		model.addAttribute("index", "index");
 		return "index";
 	}
+	//imageLoad
+	@RequestMapping("fileDown.do")
+	   public void fileDown(int fno, int pno, HttpServletResponse res) throws IOException {
+	      String path = productService.selectFilePath(pno, fno);
+	      File file = new File(path);
+	      
+	      res.setHeader("Content-Disposition", "attachement;fileName=" + file.getName());
+	      res.setHeader("Content-Transfer-Encoding", "binary");
+	      res.setContentLength((int) file.length());
 
+	      FileInputStream fis = new FileInputStream(file);
+	      BufferedOutputStream bos = new BufferedOutputStream(res.getOutputStream());
+	      byte[] buffer = new byte[1024 * 1024 * 30]; //30MB
+	      while (true) {
+	         int size = fis.read(buffer);
+	         if (size == -1)
+	            break;
+	         bos.write(buffer, 0, size);
+	         bos.flush();
+	      }
+	      bos.close();
+	      fis.close();
+	   }	
+	
 	//기본-----------------------------------------------------------
 	// 로그인페이지
 	@RequestMapping("login")
@@ -457,13 +480,34 @@ public class MainController {
 		return "redirect:/noticeList";
 	}
 	
+	//상품품목 리스트 불러온후 리스트 페이지 이동코드
+	@RequestMapping("adminProductList") //productborder.do
+	public String productList(Model model, @RequestParam(value="type", defaultValue = "0")int type) {
+		List<JoinDTO> list = productService.selectAllProduct(type);
+		model.addAttribute("list", list);
+		model.addAttribute("type","proList");
+		return "admin/product_list"; 
+		
+	}
+	
+	//상품수정
+	@RequestMapping("updateProduct")
+	public String updateProductView(int pno, Model model) {
+		JoinDTO dto = productService.selectProduct(pno);
+		
+		List<ProductFileDTO> Filelist = productService.selectPathList(pno);
+		setCategory(model);
+		model.addAttribute("dto", dto);
+		model.addAttribute("Filelist", Filelist);
+		return "admin/product_update";
+	}
+	
 	//쇼핑-----------------------------------------------------------
 	@RequestMapping("productList")
 	public String product_ListView(Model model,
 			@RequestParam(value = "ctno", defaultValue = "-1") int ctno,
 			@RequestParam(value = "cbno", defaultValue = "-1") int cbno,
-			@RequestParam(value = "type", defaultValue = "0") int type,
-			@RequestParam(name = "pageNo", defaultValue = "1") int pageNo
+			@RequestParam(value = "type", defaultValue = "0") int type
 			) {
 		//서비스 제품 목록을 받아옴
 		List<JoinDTO> list;
@@ -478,11 +522,6 @@ public class MainController {
 		model.addAttribute("cbno", cbno);
 		model.addAttribute("type", type);
 		
-		
-		// 페이징 처리
-		int count = productService.selectProductCount();
-		PagingVO vo = new PagingVO(count, pageNo, 9, 5);
-		model.addAttribute("paging", vo);
 		return "shop/product_list";
 	}
 	

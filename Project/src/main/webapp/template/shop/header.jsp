@@ -42,8 +42,7 @@
 						</c:when>
 						<c:otherwise>
 						<c:if test="${loginDTO.name == null }"><script>alert("다시 로그인해주세요");location.href="logout.do";</script></c:if>
-							<div
-								class="header__top__right__language header__top__right__auth">
+							<div class="header__top__right__language header__top__right__auth">
 								<a href="memberInfo"><i class="fa fa-user"></i> ${loginDTO.name }</a>
 							</div>
 							<div class="header__top__right__language">
@@ -102,7 +101,6 @@
 								</c:forEach>
 							</ul>
 						</li>
-						<li><a href="#">Service</a></li>
 						<li><a href="#">Contact</a></li>
 					</ul>
 				</nav>
@@ -111,7 +109,7 @@
 			<div class="col-lg-3">
 				<div class="header__cart">
 					<ul>
-						<li><a href="cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+						<li><a href="cart"><i class="fa fa-shopping-bag"></i></a></li> <!--  <span>3</span> -->
 					</ul>
 				</div>
 			</div>

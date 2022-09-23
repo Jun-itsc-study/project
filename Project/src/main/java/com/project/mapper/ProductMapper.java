@@ -20,4 +20,5 @@ public interface ProductMapper {
 	List<JoinDTO> selectCaProduct(Map<String, Object> map);
 	int selectProductCount();
 	List<ProductFileDTO> selectPathList(int pno);
+	String selectFilePath(Map<String, Object> map);
 }

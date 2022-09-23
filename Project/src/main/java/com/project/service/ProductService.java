@@ -51,5 +51,12 @@ public class ProductService {
 	public List<ProductFileDTO> selectPathList(int pno) {
 		return mapper.selectPathList(pno);
 	}
+
+	public String selectFilePath(int pno, int fno) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pno", pno);
+		map.put("fno", fno);
+		return mapper.selectFilePath(map);
+	}
 	
 }

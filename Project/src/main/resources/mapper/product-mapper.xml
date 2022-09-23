@@ -58,6 +58,9 @@
 			<when test="2">
 				price desc 
 			</when>
+			<when test="3">
+				ea 
+			</when>
 			<otherwise>
 				pno desc
 			</otherwise>
@@ -79,5 +82,8 @@
 	
 	<select id="selectPathList" resultType="productFile" parameterType="int">
 		select * from product_file where pno = #{pno}
+	</select>
+	<select id="selectFilePath" parameterType="map" resultType="String">
+		select path from product_file where pno = #{pno} and fno = #{fno}
 	</select>
  </mapper>

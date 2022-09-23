@@ -183,7 +183,6 @@
 						</form>
 					</div>
 				</div>
-				<!-- ③ -->
 				<div class="col-lg-5" style="position: relative;">
 					<div class="search-bar" style="position: absolute; bottom: 10px;">
 						<button class="btn_show btn btn-secondary">회원 등록</button>
@@ -193,7 +192,6 @@
 				<div class="col-lg-12">
 					<div class="card">
 						<div class="card-body">
-							<h5 class="card-title">회원 목록</h5>
 							<!-- Default Table -->
 							<table class="table">
 								<thead>
@@ -252,93 +250,3 @@
 	<jsp:include page="/template/admin/js.jsp"></jsp:include>
 </body>
 </html>
-
-<!-- 
-①번위치 임시 삭제
-/* function add_event_add(){
-		$(".btnAdd").click(function(){
-			var arr = $(this).parent().parent().find("input");
-			var d = "";
-			$.each(arr,function(i,obj){
-				d += $(obj).attr("name") + "=" + $(obj).val() + "&";
-			});
-			$.ajax({
-				url:"memberInsert.do",
-				data : d,
-				type: "post",
-				success:function(r){
-					if(r == 1)
-						alert("회원 정보 추가 완료");
-					else 
-						alert("회원 정보 추가 실패");
-					location.reload();
-				}
-			});
-		});
-	} //add event add */
-
-②번위치 임시 삭제
-/* var status = 0;
-		$(".btn_show").click(function(){
-			if(status == 0) {
-				$(".regiMember").show();
-				console.log(status);
-				status = 1;
-				console.log(status);
-				
-			}
-			else {
-				$(".regiMember").hide();
-				console.log(status);
-				status = 0;
-				console.log(status);
-			}
-		})//btn_show */
-		
-③번위치 임시 삭제
-<div class="col-lg-5" style="position: relative;">
-					<div class="search-bar" style="position: absolute; bottom: 10px;">
-						<button class="btn_show btn btn-secondary">회원 등록</button>
-					</div>
-				</div>
-				
-				-->
-				<!-- End Search Bar -->
-				<!-- 회원등록 Div -->
-				<!-- 
-				<div class="col-lg-12 regiMember">
-					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title">회원 등록</h5>
-							<table class="table">
-								<thead>
-									<tr>
-										<th scope="col">아이디</th>
-										<th scope="col">비밀번호</th>
-										<th scope="col">이름</th>
-										<th scope="col">생년월일</th>
-										<th scope="col">전화번호</th>
-										<th scope="col">주소</th>
-										<th scope="col">마일리지</th>
-										<th scope="col"><i class="bi bi-caret-down"></i></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td><input type="text" class="form-control" name="id"></td>
-										<td><input type="text" class="form-control" name="pwd"></td>
-										<td><input type="text" class="form-control" name="name"></td>
-										<td><input type="date" class="form-control" name="birth"></td>
-										<td><input type="text" class="form-control" name="tel"></td>
-										<td><input type="text" class="form-control" name="address"></td>
-										<td><input type="text" class="form-control" name="mileage" value="0"></td>
-										<td><button type="button" class="btnAdd"><i class="bi bi-person-plus"></i></button></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-				-->
-				<!-- End 회원등록 Div -->
- -->

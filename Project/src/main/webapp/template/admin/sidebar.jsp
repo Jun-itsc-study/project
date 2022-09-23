@@ -81,13 +81,10 @@
 			</a>
 			<ul id="product-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
 				<li>
-					<a href="#"> <i class="bi bi-circle"></i><span>상품 전체 목록</span></a>
+					<a href="adminProductList" class="proList"> <i class="bi bi-circle"></i><span>상품 전체 목록</span></a>
 				</li>
 				<li>
 					<a href="#"> <i class="bi bi-circle"></i><span>상품 등록</span></a>
-				</li>
-				<li>
-					<a href="#"> <i class="bi bi-circle"></i><span>행사품목 관리</span></a>
 				</li>
 				<li>
 					<a href="#"> <i class="bi bi-circle"></i><span>재고 관리</span></a>
