@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.project.dto.CategoryBotDTO;
 import com.project.dto.CategoryTopDTO;
 import com.project.dto.JoinDTO;
+import com.project.dto.ProductFileDTO;
 
 @Mapper
 public interface ProductMapper {
@@ -18,4 +19,5 @@ public interface ProductMapper {
 	List<CategoryBotDTO> selectAllCategoryBot();
 	List<JoinDTO> selectCaProduct(Map<String, Object> map);
 	int selectProductCount();
+	List<ProductFileDTO> selectPathList(int pno);
 }

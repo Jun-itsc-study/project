@@ -6,13 +6,21 @@
 	<select id="selectCart" resultType="cart">
 		select * from cart where mno = #{mno}
 	</select>
+	<select id="getPnoList" parameterType="int" resultType="int">
+		select pno from cart where mno = #{mno}
+	</select>
+	
 	<insert id="insertCart" parameterType="cart"><!-- 카트에 담겨있는 정보들을 가져와야하는데 무엇을 기준으로 가져올것인지. -->
 		insert into cart values(seq_cno.nextval,#{mno},#{pno},#{ea})
 	</insert>
 	<delete id="deleteCart" parameterType="int">
 		delete from cart where cno = #{cno}
 	</delete>
+	<delete id="deleteCartAll" parameterType="int">
+		delete from cart where mno = #{mno}
+	</delete>
 	<update id="updateCart" parameterType="map">
-		update cart set ea=#{ea} where cno = #{cno}
+		update cart set cea=#{ea} where cno = #{cno}
 	</update>
+	
 </mapper>

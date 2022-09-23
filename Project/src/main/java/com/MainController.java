@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.dto.CartDTO;
 import com.project.dto.CategoryBotDTO;
 import com.project.dto.CategoryTopDTO;
 import com.project.dto.JoinDTO;
@@ -94,14 +95,12 @@ public class MainController {
 	@RequestMapping("login.do")
 	public String login(String id, String pwd, HttpSession session) {
 		MemberDTO dto = memberService.login(id, pwd);
-		System.out.println(id+","+pwd);
 		if (dto != null) {
 			session.setAttribute("login", true);
 			session.setAttribute("loginDTO",dto);
 			session.setAttribute("id", id);
 			session.setAttribute("mno", dto.getMno());
 			int result = memberService.updateLastLogin(dto.getMno());
-			System.out.println(result);
 			//업데이트 실패 시 로그파일 작성?
 			return "redirect:/";
 		} else {
@@ -500,20 +499,81 @@ public class MainController {
 	
 	//장바구니 페이지로 이동하고 장바구니 테이블에 값 저장
 	@RequestMapping("insertCart")
-	public void insertCart(int pno,int ea,HttpSession session, HttpServletResponse res) throws IOException {
+	public String insertCart(int pno,@RequestParam(value="ea",defaultValue = "1")int ea,HttpSession session, HttpServletResponse res) throws IOException {
 		int mno = (int)session.getAttribute("mno");
 		int result = cartService.insertCart(mno, pno, ea);
 		//model.addAttribute("ea",ea);
 		
 		res.getWriter().write(String.valueOf(result));
-		//return "shoping_cart";
+		return "shop/cart";
 	}
 	
 	@RequestMapping("cart")
-	public String cart(Model model) {
-		//JoinDTO dto = productService.selectProduct(pno);
-		//model.addAttribute("dto",dto);
+	public String cart(Model model, HttpSession session) {
+		int mno = (int)session.getAttribute("mno");
+		List<CartDTO> cartList = cartService.selectCart(mno); 
+		List<Integer> pno = cartService.getPnoList(mno);
+		List<JoinDTO> product = new ArrayList<JoinDTO>();
+		List<ProductFileDTO> file = new ArrayList<ProductFileDTO>();
+		
+		for(int i=0;i<pno.size();i++) {
+			product.add(productService.selectProduct(pno.get(i)));
+			file.add(productService.selectPathList(pno.get(i)).get(0));
+		}
+		model.addAttribute(file);
+		model.addAttribute("cartList",cartList);
+		model.addAttribute("product",product);
 		setCategory(model);
 		return "shop/cart";
+	}
+	@RequestMapping("updateCart")
+	public void updateCart(HttpServletResponse res, int cno,int ea) throws IOException {
+		int result = cartService.updateCart(cno,ea);
+		res.getWriter().write(String.valueOf(result));
+	}
+	@RequestMapping("deleteCart")
+	public String deleteCart(int cno) {
+		cartService.deleteCart(cno);
+		return "redirect:cart";
+	}
+	
+	@RequestMapping("deleteCartAll")
+	public String deleteCartAll(HttpSession session) {
+		int mno = (int)session.getAttribute("mno");
+		cartService.deleteCartAll(mno);
+		return "redirect:cart";
+	}
+	@RequestMapping("pay")
+	public String payPage(@RequestParam(value="type", defaultValue = "-1") String type,
+			@RequestParam(value="pno", defaultValue = "-1")int pno,
+			@RequestParam(value="ea", defaultValue="1")int ea,
+			Model model, HttpSession session) {
+		if(type.equals("cart")) {
+			int mno = (int)session.getAttribute("mno");
+			List<CartDTO> cartList = cartService.selectCart(mno); 
+			List<Integer> pnoList = cartService.getPnoList(mno);
+			List<JoinDTO> product = new ArrayList<JoinDTO>();
+			List<ProductFileDTO> file = new ArrayList<ProductFileDTO>();
+			
+			for(int i=0;i<pnoList.size();i++) {
+				product.add(productService.selectProduct(pnoList.get(i)));
+				file.add(productService.selectPathList(pno).get(0));
+			}
+			
+			model.addAttribute(file);
+			model.addAttribute("cartList",cartList);
+			model.addAttribute("product",product);
+		}else {
+			JoinDTO product = productService.selectProduct(pno);
+			model.addAttribute("product",product);
+			List<ProductFileDTO> file = productService.selectPathList(pno);
+			model.addAttribute(file);
+			model.addAttribute("ea",ea);
+		}
+		MemberDTO dto = memberService.selectMember((String)session.getAttribute("id"));
+		model.addAttribute("dto",dto);
+		model.addAttribute("type",type);
+		setCategory(model);
+		return "shop/checkout";
 	}
 }

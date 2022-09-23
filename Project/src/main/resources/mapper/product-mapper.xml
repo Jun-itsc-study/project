@@ -76,4 +76,8 @@
 	<select id="selectProductCount" resultType="int">
 		select count(*) from product
 	</select>
+	
+	<select id="selectPathList" resultType="productFile" parameterType="int">
+		select * from product_file where pno = #{pno}
+	</select>
  </mapper>

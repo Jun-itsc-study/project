@@ -7,7 +7,7 @@ public class CartDTO {
 	private int cno;
 	private int mno;
 	private int pno;
-	private int ea;
+	private int cea;
 	
 	
 	public CartDTO() {
@@ -38,17 +38,17 @@ public class CartDTO {
 		this.pno = pno;
 	}
 
-	public int getEa() {
-		return ea;
+	public int getCea() {
+		return cea;
 	}
 
-	public void setEa(int ea) {
-		this.ea = ea;
+	public void setCea(int cea) {
+		this.cea = cea;
 	}
 
 	@Override
 	public String toString() {
-		return "장바구니 [cno=" + cno + ", mno=" + mno + ", pno=" + pno + ", ea=" + ea + "]";
+		return "장바구니 [cno=" + cno + ", mno=" + mno + ", pno=" + pno + ", cea=" + cea + "]";
 	}
 	
 }

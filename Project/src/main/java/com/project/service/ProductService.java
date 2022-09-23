@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.project.dto.CategoryBotDTO;
 import com.project.dto.CategoryTopDTO;
 import com.project.dto.JoinDTO;
+import com.project.dto.ProductFileDTO;
 import com.project.mapper.ProductMapper;
 
 @Service
@@ -45,6 +46,10 @@ public class ProductService {
 
 	public int selectProductCount() {
 		return mapper.selectProductCount();
+	}
+
+	public List<ProductFileDTO> selectPathList(int pno) {
+		return mapper.selectPathList(pno);
 	}
 	
 }

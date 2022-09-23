@@ -140,7 +140,7 @@ $(function(){
 						<p>${dto.productDetail.detail }</p> <!-- 상품 내용 불러오기 -->
 						
 						<!-- form태그 -->
-						<form action="orderProduct" id="frmBuy">
+						<form action="pay" id="frmBuy">
 						<input type="hidden" name="pno" value="${dto.product.pno }">
 						<div class="product__details__quantity">
 							<div class="quantity">

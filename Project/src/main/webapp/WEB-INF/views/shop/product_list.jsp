@@ -133,8 +133,8 @@
 								<div class="product__item__pic set-bg" onclick="location.href='productDetail?pno=${pro.product.pno }'" data-setbg="shop/img/featured/feature-1.jpg">
 									<!-- ${pro.productDetail.image} or filedown기능 -->
 									<ul class="product__item__pic__hover">
-										<li><a href="#" title="장바구니로"><i class="fa fa-cart-plus"></i></a></li>
-										<li><a href="#" title="바로 구매하기"><i class="fa fa-shopping-cart"></i></a></li>
+										<li><a href="insertCart?pno=${pro.product.pno }" title="장바구니로"><i class="fa fa-cart-plus"></i></a></li>
+										<li><a href="pay?pno=${pro.product.pno }" title="바로 구매하기"><i class="fa fa-shopping-cart"></i></a></li>
 									</ul>
 								</div>
 								<div class="product__item__text">
@@ -149,7 +149,7 @@
 						</div>
 					</c:forEach>
                     </div>
-                    <div class="product__pagination">
+                    <%-- <div class="product__pagination">
                     <c:if test="${paging.previousPageGroup }">
                     	<a href="#" class="prevPage"><i class="fa fa-long-arrow-left"></i></a>
                     </c:if>
@@ -159,7 +159,7 @@
                     <c:if test="${paging.nextPageGroup  }">
                     	<a href="#" class="nextPage"><i class="fa fa-long-arrow-right"></i></a>
                     </c:if>
-                    </div>
+                    </div> --%>
                 </div>
             </div>
         </div>
