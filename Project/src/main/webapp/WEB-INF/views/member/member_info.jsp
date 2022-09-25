@@ -43,7 +43,7 @@
 							<div class="blog__item__text">
 								<h5><a href="vipInfo"><script>document.write(new Date().getFullYear());</script>년도 등급 [${vip}]</a></h5>
 								<p>혜택</p>
-								<p>짜자잔</p>
+								<p>마일리지 적립 : %</p>
 							</div>
 						</div>
 					</div>
@@ -52,15 +52,15 @@
 							<div class="blog__item__text">
 								<h5><a href="#">장바구니</a></h5>
 								<c:choose>
-									<c:when test="${cartList == null}">
+									<c:when test="${cartList.size() == 0}">
 										<ul>
 											<li>장바구니에 담긴 상품이 없습니다.</li>		
 										</ul>
 									</c:when>
 									<c:otherwise>
-										<c:forEach var="cart" items="${cartList }" begin="0" end="4">
+										<c:forEach var="cart" items="${cartList }" begin="0" end="4" varStatus="idx">
 											<ul>
-												<li><a href="">테스트</a></li>		
+												<li>${product[idx.index].product.pname }</li>		
 											</ul>
 										</c:forEach>
 										<a href="#" class="blog__btn">더 보기 <span class="arrow_right"></span></a>
@@ -74,7 +74,7 @@
 							<div class="blog__item__text">
 								<h5><a href="#">주문/배송</a></h5>
 								<c:choose>
-									<c:when test="${orderList == null}">
+									<c:when test="${orderList.size() == 0}">
 										<ul>
 											<li>주문내역이 없습니다.</li>		
 										</ul>
@@ -82,7 +82,14 @@
 									<c:otherwise>
 										<c:forEach var="order" items="${orderList }" begin="0" end="4">
 											<ul>
-												<li><a href="">테스트</a></li>		
+												<li>주문번호-${order.ordered.ono }-
+													<c:choose>
+														<c:when test="${order.ordered.dno == 0 }">상품준비중</c:when>
+														<c:when test="${order.ordered.dno == 1 }">배송준비</c:when>
+														<c:when test="${order.ordered.dno == 2 }">배송중</c:when>
+														<c:otherwise>배송완료</c:otherwise>
+													</c:choose>
+												</li>		
 											</ul>
 										</c:forEach>
 										<a href="#" class="blog__btn">더 보기 <span class="arrow_right"></span></a>
@@ -96,7 +103,7 @@
 							<div class="blog__item__text">
 								<h5><a href="#">내 문의내역</a></h5>
 								<c:choose>
-									<c:when test="${qnaList == null}">
+									<c:when test="${qnaList.size() == 0}">
 										<ul>
 											<li>문의내역이 없습니다.</li>		
 										</ul>
@@ -104,7 +111,7 @@
 									<c:otherwise>
 										<c:forEach var="qna" items="${qnaList }" begin="0" end="4">
 											<ul>
-												<li><a href="">테스트</a></li>		
+												<li>${qna.qtitle }</li>		
 											</ul>
 										</c:forEach>
 										<a href="#" class="blog__btn">더 보기 <span class="arrow_right"></span></a>

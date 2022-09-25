@@ -21,10 +21,11 @@
 				<div class="footer__widget">
 					<h6>사이트맵</h6>
 					<ul>
-						<li><a href="#">전체 상품</a></li>
-						<li><a href="#">컴퓨터</a></li>
-						<li><a href="#">핸드폰</a></li>
-						<li><a href="#">게임기기</a></li>
+						<li><a href="productList">전체 상품</a></li>
+						<c:forEach var="i" items="${cateTop }">
+							<li><a href="productList?ctno=${i.ctno }">${i.ctname }</a></li>
+						
+						</c:forEach>
 						<hr>
 						<li><a href="cart">장바구니</a></li>
 						<li><a href="#">주문내역</a></li>
@@ -32,9 +33,9 @@
 					<c:if test="${login }">
 						<ul>
 							<li><a href="memberInfo">마이페이지</a></li>
-							<li><a href="#">1:1 문의하기</a></li>
-							<li><a href="#">내 문의글 보기</a></li>
-							<li><a href="#">공지사항</a></li>
+							<li><a href="qnaInsert">1:1 문의하기</a></li>
+							<li><a href="qnaList">내 문의글 보기</a></li>
+							<li><a href="notice">공지사항</a></li>
 						</ul>
 					</c:if>
 				</div>
@@ -56,9 +57,6 @@
 							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 						</p>
 					</div>
-					<!-- <div class="footer__copyright__payment">
-						<img src="img/payment-item.png" alt="">
-					</div> -->
 				</div>
 			</div>
 		</div>

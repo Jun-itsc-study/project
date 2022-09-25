@@ -40,8 +40,8 @@
 						<ul>
 							<li><a href="admin">관리 Home</a></li>
 							<li><a href="memberManage">회원관리</a></li>
-							<li><a href="#">주문 관리</a></li>
-							<li><a href="#">상품 관리</a></li>
+							<li><a href="orderManage">주문 관리</a></li>
+							<li><a href="adminProductList">상품 관리</a></li>
 							<li><a href="qnaMain">문의 관리</a></li>
 							<li><a href="noticeList">공지사항</a></li>
 						</ul>
@@ -52,8 +52,8 @@
 						<ul>
 							<li><a href="memberInfo">마이페이지</a></li>
 							<li><a href="#">주문 목록</a></li>
-							<li><a href="#">문의하기</a></li>
-							<li><a href="#">공지사항</a></li>
+							<li><a href="qnaInsert">문의하기</a></li>
+							<li><a href="notice">공지사항</a></li>
 						</ul>
 					</c:otherwise>
 				</c:choose>
@@ -77,7 +77,12 @@
 						</c:forEach>
 					</ul>
 				</li>
-				<li><a href="#">Contact</a></li>
+				<li><a href="#">Contact</a>
+					<ul class="header__menu__dropdown">
+						<li><a href="qnaInsert">문의하기</a></li>
+						<li><a href="notice">공지사항</a></li>
+					</ul>
+				</li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>

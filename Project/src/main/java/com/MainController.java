@@ -3,6 +3,7 @@ package com;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.project.dto.CartDTO;
 import com.project.dto.CategoryBotDTO;
@@ -34,7 +37,6 @@ import com.project.service.NoticeService;
 import com.project.service.OrderedService;
 import com.project.service.ProductService;
 import com.project.service.QnaService;
-import com.project.vo.PagingVO;
 
 @Controller
 public class MainController {
@@ -45,6 +47,7 @@ public class MainController {
 	private ProductService productService;
 	private CartService cartService;
 	private OrderedService orderedService;
+	
 	public MainController(MemberService memberService, AdminMemberService adminMemberService, 
 			QnaService qnaService, NoticeService noticeService, ProductService productService,
 			CartService cartService, OrderedService orderedService
@@ -82,30 +85,72 @@ public class MainController {
 		model.addAttribute("index", "index");
 		return "index";
 	}
+	//imageUpload
+	public void fileUpload(MultipartHttpServletRequest request, int pno) {
+		//String root = "C:\\Users\\JANG JUN\\Desktop\\project\\workspace\\project\\Project\\src\\main\\webapp\\shop\\img\\product";
+		//String root = "\\usr\\local\\docker\\team4\\shop\\img\\product";
+		String root = "/usr/local/tomcat/webapps/fileUpload/shop/product/img/";
+		//String root = "/usr/local";
+		
+        File userRoot = new File(root);
+        if (!userRoot.exists())
+           userRoot.mkdirs();
+		List<MultipartFile> fileList = request.getFiles("file");
+        for (MultipartFile f : fileList) {
+        	try {
+        		String originalFileName = f.getOriginalFilename();
+        		if (f.getSize() == 0)
+        			continue;
+        		//File uploadFile = new File(root + "\\" + originalFileName);
+        		//productService.insertFileList(root + "\\" + originalFileName, pno);
+        		File uploadFile = new File(root + originalFileName);
+        		productService.insertFileList(originalFileName, pno);
+        		f.transferTo(uploadFile);
+        	} catch (IllegalStateException e) {
+        		e.printStackTrace();
+        	} catch (IOException e) {
+        		e.printStackTrace();
+        	}
+        }
+	}
 	//imageLoad
 	@RequestMapping("fileDown.do")
-	   public void fileDown(int fno, int pno, HttpServletResponse res) throws IOException {
-	      String path = productService.selectFilePath(pno, fno);
-	      File file = new File(path);
-	      
-	      res.setHeader("Content-Disposition", "attachement;fileName=" + file.getName());
-	      res.setHeader("Content-Transfer-Encoding", "binary");
-	      res.setContentLength((int) file.length());
+	public void fileDown(int fno, int pno, HttpServletResponse res) {
+		String root = "/usr/local/tomcat/webapps/fileUpload/shop/product/img/";
+		// String path = productService.selectFilePath(pno, fno);
+		String fileName = productService.selectFileName(pno, fno);
+		File file = new File(root + fileName);
 
-	      FileInputStream fis = new FileInputStream(file);
-	      BufferedOutputStream bos = new BufferedOutputStream(res.getOutputStream());
-	      byte[] buffer = new byte[1024 * 1024 * 30]; //30MB
-	      while (true) {
-	         int size = fis.read(buffer);
-	         if (size == -1)
-	            break;
-	         bos.write(buffer, 0, size);
-	         bos.flush();
-	      }
-	      bos.close();
-	      fis.close();
-	   }	
-	
+		res.setHeader("Content-Disposition", "attachement;fileName=" + file.getName());
+		res.setHeader("Content-Transfer-Encoding", "binary");
+		res.setContentLength((int) file.length());
+
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			BufferedOutputStream bos = new BufferedOutputStream(res.getOutputStream());
+			byte[] buffer = new byte[1024 * 1024];
+			while (true) {
+				int size = fis.read(buffer);
+				if (size == -1)
+					break;
+				bos.write(buffer, 0, size);
+				bos.flush();
+			}
+			bos.close();
+			fis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping("notice")
+	public String notice(Model model) {
+		List<NoticeDTO> list = noticeService.selectNoticeList();
+		model.addAttribute("list", list);
+		setCategory(model);
+		return "shop/notice";
+	}
 	//기본-----------------------------------------------------------
 	// 로그인페이지
 	@RequestMapping("login")
@@ -166,7 +211,7 @@ public class MainController {
 		int regi = 500; //회원가입
 		int rer = 1000; //추천한사람
 		int red = 500; //추천받은사람
-		int result = memberService.register(id, pwd, name, Date.valueOf(birth), tel, postno, address1, address2);
+		int result = memberService.register(id, pwd, name, birth, tel, postno, address1, address2);
 		if(result == 1) {
 			MemberDTO dto = new MemberDTO();
 			dto.setMno(memberService.selectMember(id).getMno());
@@ -244,11 +289,19 @@ public class MainController {
 		
 		//장바구니 정보
 		//select c.cno, c.ea, p.pno, p.pname from cart c, product p where c.pno = p.pno and mno = #{mno}
-		//model.addAttribute("cartList",cartList);
+		List<CartDTO> cartList = cartService.selectCart(dto.getMno());
+		List<JoinDTO> product = new ArrayList<JoinDTO>();
+		List<Integer> pno = cartService.getPnoList(dto.getMno());
+		
+		for(int i=0;i<pno.size();i++) {
+			product.add(productService.selectProduct(pno.get(i)));
+		}
+		model.addAttribute("product",product);
+		model.addAttribute("cartList",cartList);
 		
 		//주문목록/배송정보
-		//
-		//model.addAttribute("orderList",orderList);
+		List<JoinDTO> orderList = orderedService.selectMyOrder(dto.getMno());
+		model.addAttribute("orderList",orderList);
 		
 		//등급정보 - 현재등급 - 다음 등급까지 얼마나 남았는지
 		String vip = memberService.getVip(dto.getVno());
@@ -313,6 +366,23 @@ public class MainController {
 		return "member/vip_info";
 	}
 	
+	@RequestMapping("qnaInsert")
+	public String qnaInsertView() {
+		return "member/qna_insert";
+	}
+	@RequestMapping("qnaInsert.do")
+	public String qnaInsertView(QnaDTO dto) {
+		qnaService.insertQna(dto);
+		return "redirect:/qnaList";
+	}
+	@RequestMapping("qnaList")
+	public String qnaList(Model model, HttpSession session) {
+		List<QnaDTO> list = qnaService.selectMemberQna((int)session.getAttribute("mno"));
+		model.addAttribute("list", list);
+		model.addAttribute("type","qna");
+		setCategory(model);
+		return "/member/qna_list";
+	}
 	//관리자-----------------------------------------------------------
 	//관리자 메인페이지
 	@RequestMapping("admin")
@@ -502,6 +572,96 @@ public class MainController {
 		return "admin/product_update";
 	}
 	
+	//상품등록보드페이지
+		@RequestMapping("productInsert")
+		public String productInsertBorder(Model model) throws IOException {
+			setCategory(model);
+			model.addAttribute("type","productInsert");
+			return "admin/product_insert";
+		}
+		//상품등록보드페이지에 있는 ajax를 이용하여 select문 값 가져오는거
+		@RequestMapping("adminGetCategoryBot")
+		public ResponseEntity<List<CategoryBotDTO>> adminGetCategoryBot(int ctno) {
+			List<CategoryBotDTO> list = productService.selectCategoryBot(ctno);
+			return ResponseEntity.ok(list);
+		}
+		
+		@RequestMapping("productInsert.do")
+		public String productInsert(String pname, int ctno, int cbno, String seller,
+				int price, int ea, String detail, String maker, MultipartHttpServletRequest request) {
+			int pno = -1;
+			int result = productService.productInsert(pname,ctno,cbno,seller);
+			
+			if(result == 1) {
+				pno = productService.getPno(pname,seller);
+				productService.productDetailInsert(pno, price, ea, detail, maker);
+			}
+			if(request.getFile("file") != null) fileUpload(request, pno);
+			return "redirect:/adminProductList";
+		}
+
+		// 상품품목 수정 태그 클릭 코드
+		@RequestMapping("productUpdate.do")
+		public String productUpdateBorder(int pno, String pname, String detail, String seller, int price, String maker,
+				int ea, // int[] dImage,
+				int ctno, int cbno, MultipartHttpServletRequest request) {
+			if (request.getParameterValues("dImage") != null) {
+				String dImage[] = request.getParameterValues("dImage");
+				for (int i = 0; i < dImage.length; i++) {
+					System.out.println(dImage[i]);
+					productService.deleteImage(pno, Integer.parseInt(dImage[i]));
+				}
+			}
+
+			productService.productUpdate(pno, pname, seller, ctno, cbno);
+			productService.productDetailUpdate(pno, price, ea, detail, maker);
+
+			if (request.getFiles("file") != null)
+				fileUpload(request, pno);
+			return "redirect:/adminProductList";
+		}
+		
+		// **관리자 주문관리--------------------------------------------------------------
+		// 주문관리 메인 페이지
+		@RequestMapping("orderManage")
+		public String orderManageView(Model model) {
+			List<JoinDTO> list = orderedService.selectAllOrder();
+			model.addAttribute("list", list);
+			model.addAttribute("type", "orderManage");
+			return "admin/order_manage";
+		}
+
+		@RequestMapping("orderSearch.do")
+		public ResponseEntity<List<JoinDTO>> orderSearch(String kind, String search) {
+			List<JoinDTO> list;
+			if (search.equals("") || search == null)
+				list = orderedService.selectAllOrder();
+			else
+				list = orderedService.searchOrder(kind, search);
+			return ResponseEntity.ok(list);
+		}
+
+		@RequestMapping("orderDetail")
+		public String orderDetailView(int ono, Model model) {
+			List<JoinDTO> list = orderedService.selectOrderDetail(ono);
+			model.addAttribute("list", list);
+			model.addAttribute("type", "orderManage");
+			
+			return "admin/order_detail";
+		}
+
+		@RequestMapping("updateOrderAddress.do")
+		public void updateOrderAddress(int ono, String postno, String address1, String address2, HttpServletResponse res)
+				throws IOException {
+			int result = orderedService.updateOrderAddress(ono, postno, address1, address2);
+			res.getWriter().write(String.valueOf(result));
+		}
+
+		@RequestMapping("updateOrderDNO.do")
+		public ResponseEntity<Integer> updateOrderDNO(int dno, int ono) throws IOException {
+			int result = orderedService.updateOrderDNO(dno, ono);
+			return ResponseEntity.ok(result);
+		}
 	//쇼핑-----------------------------------------------------------
 	@RequestMapping("productList")
 	public String product_ListView(Model model,
@@ -524,7 +684,6 @@ public class MainController {
 		
 		return "shop/product_list";
 	}
-	
 	
 //	dto에 상품정보를 담아서 상품 상세페이지로 이동하기 
 	@RequestMapping("productDetail")

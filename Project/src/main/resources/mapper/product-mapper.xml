@@ -86,4 +86,35 @@
 	<select id="selectFilePath" parameterType="map" resultType="String">
 		select path from product_file where pno = #{pno} and fno = #{fno}
 	</select>
+	<select id="selectCategoryBot" parameterType="int" resultType="categoryBot">
+		select * from category_bot where ctno = #{ctno}
+	</select>
+	
+	<insert id="productInsert" parameterType="map">
+		insert into product values(seq_pno.nextval, #{pname},#{ctno},#{cbno},#{seller})
+	</insert>
+	<select id="getPno" parameterType="map" resultType="int">
+		select pno from product where pname = #{pname} and seller = #{seller} 
+	</select>
+	<insert id="productDetailInsert" parameterType="map">
+		insert into product_detail values(#{pno}, #{price}, #{ea}, #{detail}, #{maker})
+	</insert>
+	<insert id="insertFileList" parameterType="map">
+		insert into product_file values(#{pno}, seq_fno.nextval, #{path})
+	</insert>
+	<delete id="deleteImage" parameterType="map">
+		delete from product_file where pno = #{pno} and fno = #{fno}
+	</delete>
+	<update id="productUpdate" parameterType="map">
+		update PRODUCT set 
+		pname = #{pname},ctno = #{ctno}, cbno = #{cbno} where pno = #{pno}
+	</update>
+	<update id="productDetailUpdate" parameterType="map">
+		update PRODUCT_DETAIL set 
+		price = #{price}, ea = #{ea}, detail = #{detail}, maker = #{maker} where pno = #{pno}
+	</update>
+	
+	<select id="selectFileName" parameterType="map" resultType="String">
+		select * from product_file where pno = #{pno} and fno = #{fno}
+	</select>
  </mapper>

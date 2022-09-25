@@ -24,5 +24,7 @@ public interface QnaMapper {
 	int adminDeleteQna(QnaDTO qdto);
 
 	List<QnaDTO> selectMemberQna(int mno);
+
+	int insertQna(QnaDTO dto);
 	
 }

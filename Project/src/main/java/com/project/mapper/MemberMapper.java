@@ -14,6 +14,10 @@ public interface MemberMapper {
 	public MemberDTO login(Map<String, Object> map);
 
 	public int register(Map<String, Object> map);
+	public int registerB(Map<String, Object> map);
+
+	public int registerMemberDetail(Map<String, Object> map);
+	public int registerMemberDetailR(Map<String, Object> map);
 
 	public MemberDTO selectMember(String id);
 
@@ -24,8 +28,6 @@ public interface MemberMapper {
 	public MemberDTO findAccount(Map<String, Object> map);
 
 	public int findChangePwd(Map<String, Object> map);
-
-	public int registerMemberDetail(Map<String, Object> map);
 
 	public String getVip(int vno);
 
@@ -38,5 +40,6 @@ public interface MemberMapper {
 	public int checkId(String id);
 
 	public List<MemberVipDTO> selectVipAll();
+
 
 }

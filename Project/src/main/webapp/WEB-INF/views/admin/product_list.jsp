@@ -74,7 +74,7 @@
 								</c:forEach>
 								<tr>
 									<td colspan="7"></td>
-									<td><button class="btnAdd">상품 등록</button></td>
+									<td><button class="btnAdd" onclick="location.href='productInsert'">상품 등록</button></td>
 								</tr>
 							</table>
 						</div>

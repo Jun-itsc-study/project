@@ -113,7 +113,7 @@ $(function(){
 				<div class="col-lg-6 col-md-6">
 					<div class="product__details__pic">
 						<div class="product__details__pic__item">
-							<img class="product__details__pic__item--large" src="${dto.productFile.path }" alt="">
+							<img class="product__details__pic__item--large" src="fileDown.do?pno=${dto.product.pno }&fno=${dto.productFile.fno}" alt="">
 						</div>
 						<div class="product__details__pic__slider owl-carousel">
 							<img data-imgbigurl="shop/img/product/details/test1.jpg" src="shop/img/product/details/test1.jpg" alt="">

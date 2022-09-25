@@ -52,29 +52,24 @@
 	<!-- 회원가입 -->
 	<insert id="register" parameterType="map">
 		insert into member 
-		<choose>
-			<when test="birth.equals('1')">
 				(mno, id, pwd, name, tel, postno, address1, address2)
 				values(seq_mno.nextval, #{id},#{pwd},#{name},#{tel},#{postno},#{address1},#{address2})
-			</when>
-			<otherwise>
+
+	</insert>
+	<insert id="registerB" parameterType="map">
+		insert into member 
 				(mno, id, pwd, name, birth, tel, postno, address1, address2)
 				values(seq_mno.nextval, #{id},#{pwd},#{name},to_date(#{birth},'RRRR-MM-DD'),#{tel},#{postno},#{address1},#{address2})
-			</otherwise>
-		</choose>
 	</insert>
 
 	<!-- 회원가입 시 member_detail 추가 -->
 	<insert id="registerMemberDetail" parameterType="memberDetail">
 		insert into member_detail
-			<choose>
-				<when test="recommender.equals('1')">
 					(mno) values(#{mno})				
-				</when>
-				<otherwise>
+	</insert>
+	<insert id="registerMemberDetailR" parameterType="memberDetail">
+		insert into member_detail
 					(mno, recommender) values(#{mno}, #{recommender})
-				</otherwise>
-			</choose>
 	</insert>
 	
 	<select id="selectVno" parameterType="int" resultType="int">

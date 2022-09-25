@@ -51,6 +51,10 @@ public class QnaService {
 	public List<QnaDTO> selectMemberQna(int mno) {
 		return mapper.selectMemberQna(mno);
 	}
+
+	public int insertQna(QnaDTO dto) {
+		return mapper.insertQna(dto);
+	}
 	
 	
 

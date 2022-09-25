@@ -16,7 +16,7 @@ public class JoinDTO {
 	private CategoryBotDTO categoryBot;
 	private CartDTO cart;
 	private OrderedDTO ordered;
-	private OrderDetailDTO oDetail;
+	private OrderDetailDTO orderDetail;
 	
 	public JoinDTO() {
 		super();
@@ -93,11 +93,11 @@ public class JoinDTO {
 	public void setOrdered(OrderedDTO ordered) {
 		this.ordered = ordered;
 	}
-	public OrderDetailDTO getoDetail() {
-		return oDetail;
+	public OrderDetailDTO getorderDetail() {
+		return orderDetail;
 	}
-	public void setoDetail(OrderDetailDTO oDetail) {
-		this.oDetail = oDetail;
+	public void setorderDetail(OrderDetailDTO orderDetail) {
+		this.orderDetail = orderDetail;
 	}
 	
 	

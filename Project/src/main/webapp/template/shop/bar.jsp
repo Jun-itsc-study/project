@@ -55,13 +55,12 @@
 					<div class="hero__text">
 						<span>신제품</span>
 						<h2>
-							OOOO 탑재 <br />OO원~ 
+							LG UltraWide <br />599,000원 
 						</h2>
-						<p>Free Pickup and Delivery Available</p>
+						<p></p>
 						<a href="productList" class="primary-btn">지금 보러가기</a>
 					</div>
 				</div>
-
 			</c:if>
 
 		</div>

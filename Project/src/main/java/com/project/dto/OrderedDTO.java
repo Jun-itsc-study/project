@@ -18,7 +18,6 @@ public class OrderedDTO {
 	
 	public OrderedDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getOno() {

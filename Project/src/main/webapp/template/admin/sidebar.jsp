@@ -65,10 +65,7 @@
 			</a>
 			<ul id="order-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
 				<li>
-					<a href="#"> <i class="bi bi-circle"></i><span>주문 목록</span></a>
-				</li>
-				<li>
-					<a href="#"> <i class="bi bi-circle"></i><span>배송 관리</span></a>
+					<a href="orderManage" class="orderManage"> <i class="bi bi-circle"></i><span>주문 목록</span></a>
 				</li>
 			</ul>
 		</li>
@@ -84,10 +81,7 @@
 					<a href="adminProductList" class="proList"> <i class="bi bi-circle"></i><span>상품 전체 목록</span></a>
 				</li>
 				<li>
-					<a href="#"> <i class="bi bi-circle"></i><span>상품 등록</span></a>
-				</li>
-				<li>
-					<a href="#"> <i class="bi bi-circle"></i><span>재고 관리</span></a>
+					<a href="productInsert" class="productInsert"> <i class="bi bi-circle"></i><span>상품 등록</span></a>
 				</li>
 			</ul>
 		</li>

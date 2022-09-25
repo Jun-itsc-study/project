@@ -59,4 +59,7 @@
 	<select id="selectMemberQna" parameterType="int" resultType="qna">
 		select * from qna where mno = #{mno}
 	</select>
+	<insert id="insertQna" parameterType="qna">
+		insert into qna(qno, mno, qtitle, qcontent) values(seq_qno.nextval, #{mno}, #{qtitle}, #{qcontent})
+	</insert>
 </mapper>

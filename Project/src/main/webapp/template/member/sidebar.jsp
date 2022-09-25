@@ -27,12 +27,12 @@
 		<div class="blog__sidebar__item">
 			<h4>My Info</h4>
 			<ul>
-				<li class="cart"><a href="#">장바구니</a></li>
+				<li class="cart"><a href="cart">장바구니</a></li>
 				<li class="order"><a href="#">주문목록/배송조회</a></li>
 				<li class="updateMember"><a href="updateMember">개인정보 확인/수정</a></li>
 				<li class="updatePwd"><a href="updatePwd">비밀번호 변경</a></li>
 				<li class="vipInfo"><a href="vipInfo">등급 혜택</a></li>
-				<li class="qna"><a href="#">문의 내역</a></li>
+				<li class="qna"><a href="qnaList">문의 내역</a></li>
 			</ul>
 		</div>
 	</div>

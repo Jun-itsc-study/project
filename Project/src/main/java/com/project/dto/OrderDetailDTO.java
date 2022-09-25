@@ -2,7 +2,7 @@ package com.project.dto;
 
 import org.apache.ibatis.type.Alias;
 
-@Alias("oDetail")
+@Alias("orderDetail")
 public class OrderDetailDTO {
 	private int ono;
 	private int pno;

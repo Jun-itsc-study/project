@@ -26,25 +26,33 @@ public class MemberService {
 		return mapper.login(map);
 	}
 
-	public int register(String id, String pwd, String name, Date birth, String tel, String postno, String address1, String address2) {
+	public int register(String id, String pwd, String name, String birth, String tel, String postno, String address1, String address2) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("pwd", pwd);
 		map.put("name", name);
-		map.put("birth", birth);
 		map.put("tel", tel);
 		map.put("postno", postno);
 		map.put("address1", address1);
 		map.put("address2", address2);
-		
-		return mapper.register(map);
+		if(birth.equals("1")) {
+			return mapper.register(map);
+		}else {
+			map.put("birth", Date.valueOf(birth));
+			return mapper.registerB(map);
+		}
 	}
 
 	public int registerMemberDetail(int mno, String recommender) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("mno", mno);
-		map.put("recommender", recommender);
-		return mapper.registerMemberDetail(map);
+		
+		if(recommender.equals("1")) {
+			return mapper.registerMemberDetail(map);
+		}else {
+			map.put("recommender", recommender);
+			return mapper.registerMemberDetailR(map);
+		}
 	}
 	
 	public MemberDTO selectMember(String id) {

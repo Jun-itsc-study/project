@@ -68,87 +68,10 @@
 		<!-- Icons Navigation -->
 		<nav class="header-nav ms-auto">
 			<ul class="d-flex align-items-center">
-				<!-- Notification Nav -->
-				<li class="nav-item dropdown">
-					<!-- Notification Icon -->
-					<a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown"> <i class="bi bi-bell"></i>
-						<span class="badge bg-primary badge-number">4</span>
-					</a>
-					<!-- End Notification Icon -->
-
-					<!-- Notification Dropdown Items -->
-					<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-						<li class="dropdown-header">새로운 주문내역 OO건  
-							<a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-						</li>
-						
-						<li>
-							<hr class="dropdown-divider">
-						</li>
-						
-						<c:forEach begin="0" end="3">
-							<li class="notification-item">
-								<i class="bi bi-plus-circle text-success"></i>
-								<div>
-									<h4>Lorem Ipsum</h4>
-									<p>Quae dolorem earum veritatis oditseno</p>
-									<p>30 min. ago</p>
-								</div>
-							</li>
-							
-							<li>
-								<hr class="dropdown-divider">
-							</li>
-						</c:forEach>
-					</ul>
-					<!-- End Notification Dropdown Items -->
-				</li>
-				<!-- End Notification Nav -->
-				
-				<!-- Messages Nav -->
-				<li class="nav-item dropdown">
-					<!-- Messages Icon -->
-					<a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-						<i class="bi bi-chat-left-text"></i>
-						<span class="badge bg-success badge-number">3</span>
-					</a>
-					<!-- End Messages Icon -->
-					
-					<!-- Messages Dropdown Items -->
-					<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-						<li class="dropdown-header">확인하지 않은 문의내역 OO건 
-							<a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-						</li>
-						
-						<li>
-							<hr class="dropdown-divider">
-						</li>
-						
-						<c:forEach begin="0" end="3">
-							<li class="message-item">
-								<a href="#">
-									<div>
-										<h4>Maria Hudson</h4>
-										<p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-										<p>4 hrs. ago</p>
-									</div>
-								</a>
-							</li>
-							
-							<li>
-								<hr class="dropdown-divider">
-							</li>
-						</c:forEach>
-					</ul>
-					<!-- End Messages Dropdown Items -->
-				</li>
-				<!-- End Messages Nav -->
-					
 				<!-- Profile Nav -->
 				<li class="nav-item dropdown pe-3">
 					<!-- Profile Iamge Icon -->
 					<a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-						<img src="admin/img/profile-img.jpg" alt="Profile" class="rounded-circle">
 						<span class="d-none d-md-block dropdown-toggle ps-2">${loginDTO.name }</span>
 					</a>
 					<!-- End Profile Iamge Icon -->
@@ -173,7 +96,7 @@
 						</li>
 
 						<li>
-							<a class="dropdown-item d-flex align-items-center" href="#">
+							<a class="dropdown-item d-flex align-items-center" href="orderManage">
 								<i class="bi bi-cart-check"></i> <span>주문 관리</span>
 							</a>
 						</li>
@@ -182,7 +105,7 @@
 							<hr class="dropdown-divider">
 						</li>
 						<li>
-							<a class="dropdown-item d-flex align-items-center" href="#">
+							<a class="dropdown-item d-flex align-items-center" href="adminProductList">
 								<i class="bi bi-cart4"></i> <span>상품 관리</span>
 							</a>
 						</li>

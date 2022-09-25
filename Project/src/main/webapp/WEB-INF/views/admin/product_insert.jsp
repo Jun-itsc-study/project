@@ -15,11 +15,13 @@ $(function(){
 	$("#ctno").change(function(){
 		var selected = $(this).find("option:selected").val();
 		$("#cbno").html("<option>----</option>")
+		console.log(selected);
 		$.ajax({
 			url:"adminGetCategoryBot",
 			data:"ctno="+selected,
 			success:function(r){
 				var tag = "";
+				console.log(r);
 				for(i=0;i<r.length;i++){
 					tag +="<option name='"+r[i].cbno+"' value='"+r[i].cbno+"'>"+r[i].cbname+"</option>";
 				}
@@ -49,16 +51,15 @@ $(function(){
 		if(count == 1) return;
 			$(this).parent().parent().children("p").last().remove();
 		count--;
-	});	
-	var i = 0;
+	});
+	
 	$("#delete").click(function(){
-		//var src = $(".pimage").attr("src");
-		//console.log(src);
-		var d = $(this).children("input[type=hidden]").val();
-		$("#frmUpdate").append("<input type='hidden' name='dImage' value='"+d+"'></td>");
-		$(".pimage"+d).remove();
-		$(this).remove();
-		i++;
+		var src = $(".pimage").attr("src");
+		console.log(src);
+		$(".img_td").children("img").remove();
+		$("#frmUpdate").append("<input type='hidden' name='dImage' value='"+src+"'></td>");
+		
+		
 	});
 }); 
 </script>
@@ -70,12 +71,12 @@ $(function(){
 	<main id="main" class="main">
 
 		<div class="pagetitle">
-			<h1>상품 정보 수정</h1>
+			<h1>General Tables</h1>
 			<nav>
 				<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="admin">Home</a></li>
-					<li class="breadcrumb-item">상품관리</li>
-					<li class="breadcrumb-item active">상품 정보 수정</li>
+					<li class="breadcrumb-item"><a href="/">Home</a></li>
+					<li class="breadcrumb-item">회원문의 관리</li>
+					<li class="breadcrumb-item active">회원 문의 목록</li>
 				</ol>
 			</nav>
 		</div>
@@ -86,40 +87,31 @@ $(function(){
 				<div class="col-lg-12">
 					<div class="card">
 						<div class="card-body">
-						<form action="productUpdate.do" method="post" id="frmUpdate" enctype="multipart/form-data">
+							<form action="productInsert.do" method="post" enctype="multipart/form-data">
 							<table class="table">
 								<tr>
 									<th>상품명</th>
-									<td>
-										<input type="hidden" name="pno" value="${dto.product.pno }">
-										<input type="text" name="pname" value="${dto.product.pname }">
-									</td>
+									<td> <input type="text" name="pname"></td>
 									<td colspan="4"></td>
 								</tr>
 								<tr>
 									<th>상품 이미지</th>
-									<td class="img_td">
-									<c:forEach var="f" items="${Filelist }">
-										<img src="fileDown.do?fno=${f.fno}&pno=${f.pno}" class="pimage${f.fno }"><i class="ri-delete-bin-2-line" id="delete"><input type="hidden" value="${f.fno }"></i>
-									</c:forEach>
+									
+									<td colspan="2" id="file_form">
+										<p><input type="file" name="file"> 
+										<button type="button" id="plus">+</button> <button type="button" id="minus">-</button></p>
 									</td>
-
-									<td id="file_form" colspan="2">
-										<p>
-											<input type="file" name="file">
-											<button type="button" id="plus">+</button>
-											<button type="button" id="minus">-</button>
-										</p>
-									</td>
-
+									<td><a href="#" id="delete">이미지삭제</a></td>
 									<td colspan="2"></td>
-								</tr>
+								
+								<tr>
 								<tr>
 									<th>상품분류</th>
 									<td>
 										<select name="ctno" id="ctno">
+										<option>----</option>
 											<c:forEach var="i" items="${cateTop }">
-												<option value="${i.ctno }" <c:if test="${i.ctno == dto.categoryTop.ctno }">selected</c:if>>${i.ctname }</option>
+												<option value="${i.ctno }">${i.ctname }</option>
 											</c:forEach>
 										</select>
 									</td>
@@ -127,33 +119,30 @@ $(function(){
 									<td>
 										<select name="cbno" id="cbno">
 											<option>----</option>
-											<c:forEach var="i" items="${cateBot }">
-												<c:if test="${i.ctno == dto.categoryTop.ctno }">
-													<option value="${i.cbno }" <c:if test="${i.cbno == dto.categoryBot.cbno }">selected</c:if>>${i.cbname }</option>
-												</c:if>
-											</c:forEach>
 										</select>
 									</td>
-									<td colspan="4"></td>
+									<td colspan="3"></td>
 								</tr>
 
 								<tr>
 									<th style="vertical-align: top;">상품디테일</th>
-									<td colspan="5"><textarea name="detail" id="content" cols="130" rows="20">${dto.productDetail.detail} </textarea></td>
-								</tr>
-								<tr>
+									<td colspan="2"><textarea name="detail" id="detail" cols="80" rows="20"></textarea></td>
 									<th>제조사</th>
-									<td><input type="text" name="maker" value="${dto.productDetail.maker }"></td>
-									<th>가격</th>
-									<td><input type="text" name="price" value="${dto.productDetail.price }"></td>
-									<th>수량</th>
-									<td><input type="text" name="ea" value="${dto.productDetail.ea }"></td>
-									
+									<td><input type="text" name="maker"></td>
+									<td colspan="2"></td>
 								</tr>
 								<tr>
-									<td colspan="6" style="text-align: right;border:none;">
-										<button class="btnAdd cart-btn">수정하기</button>
-										<a href="adminProductList">목록으로</a>
+									<th>판매자</th>
+									<td><input type="text" id="seller" name="seller"></td>
+									<th>가격</th>
+									<td><input type="text" name="price"></td>
+									<th>수량</th>
+									<td><input type="text" name="ea"></td>
+								</tr>
+								<tr>
+									<td colspan="6" style="text-align: right;">
+										<button type="submit" class="btnAdd">등록하기</button>
+										<a href="location.href='adminProductList'">목록으로</a>
 									</td>
 								</tr>
 							</table>
