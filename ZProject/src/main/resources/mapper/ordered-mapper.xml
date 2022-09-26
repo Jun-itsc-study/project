@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.OrderedMapper">
+	<!-- 주문 테이블에 insert -->
+	<insert id="insertOrdered" parameterType="map">
+		insert into ordered
+		<choose>
+		<when test="mno != 0"><!-- 회원이 구매하려고 할 때 -->
+		(ono,mno,dno,postno,address1,address2,oea,totalprice,odate)
+		values(seq_ono.nextval(),#{mno},#{dno},#{postno},#{address1},#{address2},#{oea},#{totalprice},sysdate)
+		</when>
+		<otherwise><!-- 비회원이 구매하려고 할 때 -->
+		(ono,mno,nmno,dno,postno,address1,address2,oea,totalprice,odate)
+		values(seq_ono.nextval(),0,#{nmno},#{dno},#{postno},#{address1},#{address2},#{oea},#{totalprice},sysdate)
+		</otherwise>
+		</choose>
+	</insert>
+	<!-- Nmno가 중복되는지 확인 -->
+	<select id="checkNmno" parameterType="int" resultType="int">
+		select count(*) from ordered where nmno = #{nmno}
+	</select>
+	<!-- 주문상세 페이지에 insert -->
+	<insert id="insertOrderedDetail" parameterType="map">
+		<selectKey keyProperty="so" resultType="int" order="BEFORE">
+			select SEQ_ONO.CURRVAL from dual;
+		</selectKey>
+		insert into ordered_detail(ono,pno,pprice,pcount,ptotalprice) values(#{so},#{pno},#{pprice},#{pcount},#{ptotalprice})
+	</insert>
+	
+	<!-- 주문내역 조회하기 -->
+	<select id="selectOrederedAll">
+		select o.*,od.* from oredered o, orderedDetail od where o.ono = od.ono
+	</select>
+</mapper>

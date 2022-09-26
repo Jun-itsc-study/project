@@ -41,7 +41,9 @@
             <c:forEach var="pro" items="${proList }">
                 <div class="col-lg-3 col-md-4 col-sm-6 mix ct_${pro.categoryTop.ctno }">
                     <div class="featured__item">
-                        <div class="featured__item__pic set-bg" onclick="location.href='productDetail?pno=${pro.product.pno }'" data-setbg="fileDown.do?fno=${pro.productFile.fno }&pno=${pro.product.pno}"> <!-- ${pro.productDetail.image} or filedown기능 -->
+                    <!-- fileDown.do?pno=${pro.product.pno }&fno=${pro.productFile.fno} -->
+                        <div class="featured__item__pic set-bg" onclick="location.href='productDetail?pno=${pro.product.pno }'">
+                        	<img alt="" src="shop/img/product/${pro.productFile.path }" style="width:270px;height: 270px;">
                             <ul class="featured__item__pic__hover">
                                 <li><a href="insertCart?pno=${pro.product.pno }" title="장바구니로"><i class="fa fa-cart-plus"></i></a></li>
 								<li><a href="pay?pno=${pro.product.pno }" title="바로 구매하기"><i class="fa fa-shopping-cart"></i></a></li>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.ProductMapper">
+
+	<select id="selectAllBoard" resultType="Product">
+		select
+		p.pno, p.pname, p.seller, pd.price, pd.ea, pd.image, pd.detail, pd.maker,
+		ct.ctno, ct.ctname, cb.cbno, cb.cbname
+		from product p, product_detail pd, category_top ct, category_bot cb
+		where p.pno = pd.pno and p.ctno = ct.ctno and p.cbno = cb.cbno
+	</select>
+	<select id="selectproduct" resultType="Product">
+		select * from product_info where pno = #{pno}
+	</select>
+	<update id="deleteImage" parameterType="map">
+		update PRODUCT_DETAIL set image = #{image} where pno = #{pno}
+	</update>
+	<update id="productUpdate" parameterType="map">
+		update PRODUCT_DETAIL set price = #{price},ea = #{ea},image = #{image},detail = #{detail},maker = #{maker}
+		 where pno = #{pno}
+	</update>
+	<update id="productUpdate2" parameterType="map">
+		update PRODUCT set pname = #{pname} where pno = #{pno}
+	</update>
+	
+	<delete id="deleteProduct" parameterType="String">
+		delete from PRODUCT_DETAIL where pno = #{pno}
+	</delete>
+	
+</mapper>

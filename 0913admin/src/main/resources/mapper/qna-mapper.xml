@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.QnaMapper">
+
+	<select id="selectAllBoard" resultType="qna">
+		select qna.qno,member.id,qna.qstatus,qna.qdate,qna.qtitle from qna,member
+		where qna.mno = member.mno
+	</select>
+	
+	<select id="selectBoard" resultType="qna">
+		select * from qna where qno = #{qno}
+	</select>
+	
+	
+	<update id="changeQstatus" parameterType="map">
+		update qna set qstatus=#{qstatus} where qno = #{qno}
+	</update>
+	
+	<update id="qanswerInsert" parameterType="map">
+		 update qna set qanswer=#{qanswer} where qno = #{qno}
+	</update>
+	
+</mapper>

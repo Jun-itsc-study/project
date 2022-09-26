@@ -100,7 +100,8 @@ $(function(){
 									<th>상품 이미지</th>
 									<td class="img_td">
 									<c:forEach var="f" items="${Filelist }">
-										<img src="fileDown.do?fno=${f.fno}&pno=${f.pno}" class="pimage${f.fno }"><i class="ri-delete-bin-2-line" id="delete"><input type="hidden" value="${f.fno }"></i>
+									<!-- fileDown.do?fno=${f.fno}&pno=${f.pno} -->
+										<img src="shop/img/product/${f.path }" class="pimage${f.fno }"><i class="ri-delete-bin-2-line" id="delete"><input type="hidden" value="${f.fno }"></i>
 									</c:forEach>
 									</td>
 

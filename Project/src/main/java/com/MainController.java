@@ -89,7 +89,7 @@ public class MainController {
 	public void fileUpload(MultipartHttpServletRequest request, int pno) {
 		//String root = "C:\\Users\\JANG JUN\\Desktop\\project\\workspace\\project\\Project\\src\\main\\webapp\\shop\\img\\product";
 		//String root = "\\usr\\local\\docker\\team4\\shop\\img\\product";
-		String root = "/usr/local/tomcat/webapps/fileUpload/shop/product/img/";
+		String root = "/usr/local/docker/team4/fileUpload/shop/product/img/";
 		//String root = "/usr/local";
 		
         File userRoot = new File(root);
@@ -116,10 +116,11 @@ public class MainController {
 	//imageLoad
 	@RequestMapping("fileDown.do")
 	public void fileDown(int fno, int pno, HttpServletResponse res) {
-		String root = "/usr/local/tomcat/webapps/fileUpload/shop/product/img/";
+		String root = "/usr/local/docker/team4/fileUpload/shop/product/img/";
 		// String path = productService.selectFilePath(pno, fno);
 		String fileName = productService.selectFileName(pno, fno);
-		File file = new File(root + fileName);
+//		File file = new File(root + fileName);
+		File file = new File(fileName);
 
 		res.setHeader("Content-Disposition", "attachement;fileName=" + file.getName());
 		res.setHeader("Content-Transfer-Encoding", "binary");
@@ -386,7 +387,13 @@ public class MainController {
 	//관리자-----------------------------------------------------------
 	//관리자 메인페이지
 	@RequestMapping("admin")
-	public String adminPage() {
+	public String adminPage(Model model) {
+		List<JoinDTO> memList = adminMemberService.selectAllMember();
+		model.addAttribute("memList", memList);
+		List<JoinDTO> qnaList = qnaService.selectAllQna();
+		model.addAttribute("qnaList", qnaList);
+		List<JoinDTO> proList = productService.selectAllProduct(0);
+		model.addAttribute("proList", proList);
 		return "admin/admin_index";
 	}
 	//회원관리페이지

@@ -131,7 +131,8 @@
 						<div class="col-lg-4 col-md-6 col-sm-6">
 							<div class="product__item">
 							<!-- shop/img/featured/feature-1.jpg -->
-								<div class="product__item__pic set-bg" onclick="location.href='productDetail?pno=${pro.product.pno }'" data-setbg="fileDown.do?fno=${pro.productFile.fno }&pno=${pro.product.pno}">
+							<!-- fileDown.do?pno=${pro.product.pno }&fno=${pro.productFile.fno} -->
+								<div class="product__item__pic set-bg" onclick="location.href='productDetail?pno=${pro.product.pno }'" data-setbg="shop/img/product/${pro.productFile.path }">
 									<!-- ${pro.productDetail.image} or filedown기능 -->
 									<ul class="product__item__pic__hover">
 										<li><a href="insertCart?pno=${pro.product.pno }" title="장바구니로"><i class="fa fa-cart-plus"></i></a></li>

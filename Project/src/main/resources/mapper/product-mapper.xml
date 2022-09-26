@@ -50,20 +50,17 @@
 	
 	<!-- 제품 전체 출력 -->
 	<select id="selectAllProduct" resultMap="productJoin" parameterType="int">
-		select * from product_info order by  
+		select * from product_info order by pno desc
 		<choose>
 			<when test="type==1">
-				price
+				,price
 			</when>
 			<when test="2">
-				price desc 
+				,price desc 
 			</when>
 			<when test="3">
-				ea 
+				,ea 
 			</when>
-			<otherwise>
-				pno desc
-			</otherwise>
 		</choose>
 	</select>
 	<select id="selectCaProduct" parameterType="map" resultMap="productJoin">

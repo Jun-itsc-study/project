@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.CartMapper">
+	<select id="selectCart" resultType="cart">
+		select * from cart where mno = #{mno}
+	</select>
+	<insert id="insertCart" parameterType="cart"><!-- 카트에 담겨있는 정보들을 가져와야하는데 무엇을 기준으로 가져올것인지. -->
+		insert into cart values(seq_cno.nextval,#{mno},#{pno},#{ea})
+	</insert>
+	<delete id="deleteCart" parameterType="int">
+		delete from cart where cno = #{cno}
+	</delete>
+	<update id="updateCart" parameterType="map">
+		update cart set ea=#{ea} where cno = #{cno}
+	</update>
+</mapper>

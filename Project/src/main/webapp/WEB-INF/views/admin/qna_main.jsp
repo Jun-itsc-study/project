@@ -44,8 +44,6 @@
 				<div class="col-lg-10">
 					<div class="card">
 						<div class="card-body">
-							<h5 class="card-title">여기에 검색이나 탭넣기</h5>
-
 							<!-- Default Table -->
 							<table class="table">
 								<thead>
